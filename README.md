@@ -1,10 +1,10 @@
 # Running the application
 
-1. Build the client app
+1. Install NodeJS packages
    ```
    npm install
    ```
-1. Run the client app
+1. Build and Run the client app
    ```
    npm start
    ```
