@@ -51,7 +51,7 @@ class CheckoutForm extends React.Component {
 
         let int_amount = Math.trunc(parseFloat(this.state.amount) * 100);
         const data = {
-            "date": "2020-10-26T14:24:12.709Z",
+            "date": "2020-10-26T14:24:12.709Z", # Fixme: 
             "int_amount": int_amount,
             "donator_type": "individual",
             "name": this.state.name,
