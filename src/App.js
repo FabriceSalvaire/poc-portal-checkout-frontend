@@ -5,6 +5,18 @@
 
 import React, { useState, useEffect } from "react";
 
+// https://www.google.com/recaptcha
+//   https://developers.google.com/recaptcha/docs/v3
+//   https://developers.google.com/recaptcha/docs/verify
+//   <script src="https://www.google.com/recaptcha/api.js?render=reCAPTCHA_site_key"></script>
+// https://github.com/t49tran/react-google-recaptcha-v3
+//   https://www.npmjs.com/package/react-google-recaptcha-v3
+import {
+    GoogleReCaptchaProvider,
+    GoogleReCaptcha,
+    // useGoogleReCaptcha,
+} from 'react-google-recaptcha-v3';
+
 import { loadStripe } from "@stripe/stripe-js";
 
 import "./App.scss";
@@ -12,6 +24,7 @@ import "./App.scss";
 /**************************************************************************************************/
 
 const stripe_public_api_key = "pk_test_51HdczbBKQhCtA3D9aKEImtHELwbA2BGFlSnO4kfki1mjjs8xf0ZuptlEMy5WUn6S6YX2MUb1rUDm2pArLiV4qH9Y00b2ZFJAWk";
+const recaptcha_site_key = '6LeTlt0ZAAAAAEH8r-8lYhgdzfoKMxkWVA8BMklX';
 
 /**************************************************************************************************/
 
@@ -31,6 +44,7 @@ class CheckoutForm extends React.Component {
         };
         this.handle_change = this.handle_change.bind(this);
         this.handle_submit = this.handle_submit.bind(this);
+        this.handle_verify = this.handle_verify.bind(this);
     }
 
     handle_change(event) {
@@ -41,6 +55,10 @@ class CheckoutForm extends React.Component {
             ...this.state,
             [field]: value,
         });
+    }
+
+    handle_verify(token) {
+        console.log('recaptcha token:', token);
     }
 
     // const handle_submit = async (event) => {
@@ -62,12 +80,14 @@ class CheckoutForm extends React.Component {
         };
         console.log(data);
 
-        const response = await fetch("/api/v1/donations/", {
+        const backend_url = "https://portal-demo-backend.fabrice-salvaire.fr";
+        const response = await fetch(backend_url + "/api/v1/donations/", {
             method: "POST",
             body: JSON.stringify(data)
         });
 
         const donation = await response.json();
+        console.log(donation);
 
         // When the customer clicks on the button, redirect them to Checkout.
         const result = await stripe.redirectToCheckout({
@@ -84,8 +104,9 @@ class CheckoutForm extends React.Component {
     render() {
         return (
             <div>
+                <GoogleReCaptcha onVerify={this.handle_verify} />
                 <form id="checkout_form" onSubmit={this.handle_submit}>
-                    <label for="name">Name</label>
+                    <label>Name</label>
                     <input name="name" type="text" value={this.state.name} onChange={this.handle_change} />
                     <label>Email</label>
                     <input name="email" type="email" value={this.state.email} onChange={this.handle_change} />
@@ -129,9 +150,27 @@ export default function App() {
         }
     }, []);
 
+    // <GoogleReCaptchaProvider
+    //     reCaptchaKey="[Your recaptcha key]"
+    //     language="[optional_language]"
+    //     useRecaptchaNet="[optional_boolean_value]"
+    //     scriptProps={{
+    //         async: false, // optional, default to false,
+    //         defer: false // optional, default to false
+    //         appendTo: "head" // optional, default to "head", can be "head" or "body",
+    //         nonce: undefined // optional, default undefined
+    //     }}
+    // >
+    //     <YourApp />
+    // </GoogleReCaptchaProvider>
+
     return message ? (
         <Message message={message} />
     ) : (
-        <CheckoutForm />
+        <GoogleReCaptchaProvider
+            reCaptchaKey={recaptcha_site_key}
+        >
+            <CheckoutForm />
+        </GoogleReCaptchaProvider>
     );
 }
