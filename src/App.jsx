@@ -25,9 +25,6 @@
 
 import React, { useState, useEffect } from "react";
 
-import clsx from 'clsx';
-
-import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -35,28 +32,13 @@ import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Grid from '@material-ui/core/Grid';
-import Input from '@material-ui/core/Input';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import InputLabel from '@material-ui/core/InputLabel';
-import Link from '@material-ui/core/Link';
-import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import Typography from '@material-ui/core/Typography';
 
-import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-import CreditCardIcon from '@material-ui/icons/CreditCard';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
-import { makeStyles, useStyles, withStyles, ThemeProvider } from '@material-ui/core/styles';
+import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 
 // https://www.google.com/recaptcha
 //   https://developers.google.com/recaptcha/docs/v3
@@ -361,6 +343,7 @@ function CheckoutForm() {
             <Typography component="h1" variant="h5">
                 {Config.messages.title3}
             </Typography>
+
             <Box mt={2} ml={2}>
                 <SelectPaymentMethod
                     default_method={Config.payement_methods[0].id}
@@ -417,7 +400,7 @@ export default function App() {
         if (query.get("canceled")) {
             set_message("Order canceled -- continue to shop around and checkout when you're ready.");
         }
-    });
+    }, [message]);
 
     // <GoogleReCaptchaProvider
     //     reCaptchaKey="[Your recaptcha key]"
