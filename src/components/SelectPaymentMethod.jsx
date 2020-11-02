@@ -45,7 +45,7 @@ export default function SelectPaymentMethod(props) {
             aria-label="text alignment"
         >
             { props.methods.map((method, index) => (
-                <ToggleButton value={method.id} aria-label="">
+                <ToggleButton key={props.key_prefix + index} value={method.id} aria-label="">
                     <span>{method.icon} {method.title}</span>
                 </ToggleButton>
             ))}
@@ -54,4 +54,5 @@ export default function SelectPaymentMethod(props) {
 }
 
 SelectPaymentMethod.defaultProps = {
+    key_prefix: "SelectPaymentMethod",
 }

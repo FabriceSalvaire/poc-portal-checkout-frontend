@@ -100,7 +100,7 @@ export const messages = {
 
 export const default_amounts = [30, 50, 75, 100];
 
-export const payement_methods = [
+export const payment_methods = [
     { id: "card", title: messages.card, icon: <FontAwesomeIcon icon="credit-card" /> },
     { id: "bank_transfer", title: messages.bank_transfer, icon: <FontAwesomeIcon icon="building" /> }, /* <AccountBalanceIcon/> */
     { id: "check", title: messages.check, icon:  <FontAwesomeIcon icon="money-check" /> },

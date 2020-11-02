@@ -52,12 +52,13 @@ export default function SelectCountry(props) {
             onChange={handle_change}
         >
             { props.country_list.map((country, index) => (
-                <MenuItem value={country.number}>{country.name}</MenuItem>
+                <MenuItem key={props.key_prefix + index} value={country.number}>{country.name}</MenuItem>
             ))}
         </Select>
     );
 }
 
 SelectCountry.defaultProps = {
+    key_prefix: "SelectCountry",
     country_list: CountryList.country_list_iso_data,
 }

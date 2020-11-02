@@ -30,7 +30,8 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 /**************************************************************************************************/
 
 export default function SelectCurrencyAmount(props) {
-    const [amount, set_amount] = useState(props.default_amount);
+    const [amount, set_amount] = useState(props.init_choice);
+    console.log(`SelectCurrencyAmount ${amount}`)
 
     const handle_change = (event, new_value) => {
         set_amount(new_value);
@@ -45,7 +46,7 @@ export default function SelectCurrencyAmount(props) {
             aria-label="text alignment"
         >
             { props.amounts.map((amount, index) => (
-                <ToggleButton value={amount} aria-label="">
+                <ToggleButton key={props.key_prefix + index} value={amount} aria-label="">
                     {amount} {props.currency}
                 </ToggleButton>
             ))}
@@ -54,5 +55,6 @@ export default function SelectCurrencyAmount(props) {
 }
 
 SelectCurrencyAmount.defaultProps = {
+    key_prefix: "SelectCurrencyAmount",
     currency: "€",
 }

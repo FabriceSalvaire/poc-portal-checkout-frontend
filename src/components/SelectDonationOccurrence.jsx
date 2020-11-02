@@ -35,17 +35,18 @@ import * as Config from "../Config";
 
 /**************************************************************************************************/
 
-export default function SelectPaymentOccurrence(props) {
-    const [method, set_method] = useState("once");
+export default function SelectDonationOccurrence(props) {
+    const [type, set_type] = useState(props.init_choice);
 
     const handle_change = (event, new_value) => {
-        set_method(new_value);
+        set_type(new_value);
         props.onChange(new_value);
+        // Fixme: null
     };
 
     return (
         <ToggleButtonGroup
-            value={method}
+            value={type}
             exclusive
             onChange={handle_change}
             aria-label="text alignment"
@@ -60,5 +61,5 @@ export default function SelectPaymentOccurrence(props) {
     );
 }
 
-SelectPaymentOccurrence.defaultProps = {
+SelectDonationOccurrence.defaultProps = {
 }

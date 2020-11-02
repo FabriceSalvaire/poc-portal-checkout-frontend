@@ -25,20 +25,20 @@
 
 import React, { useState, useEffect } from "react";
 
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
-import Container from '@material-ui/core/Container';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Grid from '@material-ui/core/Grid';
-import InputLabel from '@material-ui/core/InputLabel';
-import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import Checkbox from "@material-ui/core/Checkbox";
+import Container from "@material-ui/core/Container";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Grid from "@material-ui/core/Grid";
+import InputLabel from "@material-ui/core/InputLabel";
+import Paper from "@material-ui/core/Paper";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
 
-import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 
 // https://www.google.com/recaptcha
 //   https://developers.google.com/recaptcha/docs/v3
@@ -50,7 +50,7 @@ import {
     GoogleReCaptchaProvider,
     GoogleReCaptcha,
     // useGoogleReCaptcha,
-} from 'react-google-recaptcha-v3';
+} from "react-google-recaptcha-v3";
 
 import { loadStripe } from "@stripe/stripe-js";
 
@@ -66,7 +66,7 @@ import SelectCountry from "./components/SelectCountry";
 import SelectCurrencyAmount from "./components/SelectCurrencyAmount";
 import SelectDonatorType from "./components/SelectDonatorType";
 import SelectPaymentMethod from "./components/SelectPaymentMethod";
-import SelectPaymentOccurrence from "./components/SelectPaymentOccurrence";
+import SelectDonationOccurrence from "./components/SelectDonationOccurrence";
 
 import "./components/SvgIcons";
 
@@ -90,18 +90,31 @@ const useFormStyle = makeStyles((theme) => ({
 // class CheckoutForm extends React.Component {
 function CheckoutForm() {
     const classes = useFormStyle();
+    // const [is_preset_amount, set_is_preset_amount] = React.useState(true);
     const [values, set_values] = React.useState({
-        forname: 'John',
-        name: 'Doe',
-        email: 'john.doe@example.com',
-        amount: '', // default_amount
-        reduced_amount: '', // compute_reduced_amount(default_amount),
+        // Step 1
+        donation_occurence: "once",
+        preset_amount: Config.default_amounts[0],
+        custom_amount: "",
+        is_preset_amount: true,
+        reduced_amount: "", // compute_reduced_amount(default_amount),
+        // Step 2
+        donator_type: "individual",
+        email: "john.doe@example.com",
+        forname: "John",
+        name: "Doe",
         tax_receipt: true,
+        address: "",
+        complement: "",
+        zip_code: "",
+        city: "",
         country: "France",
+        // Step 3
+        payment_method: "card",
     });
 
-    const handle_change = (prop) => (event) => {
-        let value = event.target.value;
+    const set_value = (prop, value) => {
+        console.log(`value changed: ${prop} = ${value}`);
         var other_values = {};
         switch (prop) {
         case "amount":
@@ -111,8 +124,36 @@ function CheckoutForm() {
         set_values({ ...values, ...other_values, [prop]: value });
     };
 
+    const handle_change = (prop) => (value) => {
+        console.log(`handle_change ${prop} ${value}`);
+        set_value(prop, value);
+    };
+
+    const handle_change_event = (prop) => (event) => {
+        let value = event.target.value;
+        console.log(`handle_change ${prop} ${event} ${value}`);
+        set_value(prop, value);
+    };
+
+    const handle_preset_amount_change = (amount) => {
+        console.log(`handle_preset_amount_change ${amount}`);
+        // set_is_preset_amount(true);
+        // set_value("preset_amount", amount);
+        set_values({ ...values, is_preset_amount: true, preset_amount: amount, custom_amount: "" });
+        console.log(values);
+    };
+
+    const handle_custom_amount_change = (amount) => {
+        console.log(`handle_custom_amount_change ${amount}`);
+        // if (values.is_preset_amount)
+        // set_is_preset_amount(false);
+        // set_value("amount", amount);
+        set_values({ ...values, is_preset_amount: false, preset_amount: null, custom_amount: amount });
+        console.log(values);
+    };
+
     // handle_verify(token) {
-    //     console.log('recaptcha token:', token);
+    //     console.log("recaptcha token:", token);
     // }
 
     // // const handle_submit = async (event) => {
@@ -157,8 +198,16 @@ function CheckoutForm() {
 
     // <GoogleReCaptcha onVerify={this.handle_verify} />
 
-    const Step1 = () => (
-        <React.Fragment>
+    // Note: don't wrap part of the JSX this in:
+    //   https://github.com/mui-org/material-ui/issues/783 — [TextField] loses focus on rerender
+    // const Step1 = () => (
+    //     <React.Fragment>
+    //     </React.Fragment>
+    // );
+
+    return (
+        <form > {/* onSubmit={this.handle_submit} */}
+            {/* <Step1/> */}
             <Typography component="h1" variant="h5">
                 {Config.messages.title1}
             </Typography>
@@ -171,15 +220,18 @@ function CheckoutForm() {
                 >
                     <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
                         <Grid item>
-                            <SelectPaymentOccurrence onChange={handle_change}/>
+                            <SelectDonationOccurrence
+                                init_choice={values.donation_occurence}
+                                onChange={handle_change("donation_occurence")}
+                            />
                         </Grid>
                     </Grid>
                     <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
                         <Grid item>
                             <SelectCurrencyAmount
-                                default_amount={Config.default_amounts[0]}
+                                init_choice={values.is_preset_amount ? values.preset_amount : null}
                                 amounts={Config.default_amounts}
-                                onChange={handle_change}
+                                onChange={handle_preset_amount_change}
                             />
                         </Grid>
                         <Grid item>
@@ -188,18 +240,15 @@ function CheckoutForm() {
                                 name="amount"
                                 label="Amount"
                                 variant="standard"
-                                default_amount={values.amount}
-                                onChange={handle_change}
+                                /* default_amount={values.is_preset_amount ? "" : values.amount} */
+                                onChange={handle_custom_amount_change}
                             />
                         </Grid>
                     </Grid>
                 </Grid>
             </Box>
-        </React.Fragment>
-    );
 
-    const Step2 = () => (
-        <React.Fragment>
+            {/* <Step2/> */}
             <Typography component="h1" variant="h5">
                 {Config.messages.title2}
             </Typography>
@@ -212,7 +261,9 @@ function CheckoutForm() {
                                 {Config.messages.i_represent}
                             </Typography>
                         </Grid>
-                        <SelectDonatorType />
+                        <SelectDonatorType
+                            onChange={handle_change("donator_type")}
+                        />
                     </Grid>
                     <Grid item>
                         <TextField
@@ -224,7 +275,7 @@ function CheckoutForm() {
                             variant="standard"
                             type="email"
                             value={values.email}
-                            onChange={handle_change('email')}
+                            onChange={handle_change_event("email")}
                         />
                     </Grid>
                     <Grid item>
@@ -234,7 +285,7 @@ function CheckoutForm() {
                                     name="tax_receipt"
                                     color="primary"
                                     checked={values.tax_receipt}
-                                    onChange={handle_change("tax_receipt")}
+                                    onChange={handle_change_event("tax_receipt")}
                                 />
                             }
                             label={Config.messages.i_would_like_to_receive_a_tax_receipt}
@@ -249,9 +300,8 @@ function CheckoutForm() {
                                 autoComplete="forname"
                                 required
                                 variant="standard"
-                                autoFocus
                                 value={values.forname}
-                                onChange={handle_change('forname')}
+                                onChange={handle_change_event("forname")}
                             />
                         </Grid>
                         <Grid item>
@@ -262,9 +312,8 @@ function CheckoutForm() {
                                 autoComplete="name"
                                 required
                                 variant="standard"
-                                autoFocus
                                 value={values.name}
-                                onChange={handle_change('name')}
+                                onChange={handle_change_event("name")}
                             />
                         </Grid>
                     </Grid>
@@ -276,9 +325,8 @@ function CheckoutForm() {
                             autoComplete="address"
                             required
                             variant="standard"
-                            autoFocus
                             value={values.address}
-                            onChange={handle_change('address')}
+                            onChange={handle_change_event("address")}
                         />
                     </Grid>
                     <Grid item>
@@ -289,9 +337,8 @@ function CheckoutForm() {
                             autoComplete="complement"
                             required
                             variant="standard"
-                            autoFocus
                             value={values.complement}
-                            onChange={handle_change('complement')}
+                            onChange={handle_change_event("complement")}
                         />
                     </Grid>
                     <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
@@ -303,9 +350,8 @@ function CheckoutForm() {
                                 autoComplete="zip_code"
                                 required
                                 variant="standard"
-                                autoFocus
                                 value={values.zip_code}
-                                onChange={handle_change('zip_code')}
+                                onChange={handle_change_event("zip_code")}
                             />
                         </Grid>
                         <Grid item>
@@ -316,9 +362,8 @@ function CheckoutForm() {
                                 autoComplete="city"
                                 required
                                 variant="standard"
-                                autoFocus
                                 value={values.city}
-                                onChange={handle_change('city')}
+                                onChange={handle_change_event("city")}
                             />
                         </Grid>
                     </Grid>
@@ -335,31 +380,21 @@ function CheckoutForm() {
                     </Grid>
                 </Grid>
             </Box>
-        </React.Fragment>
-    );
 
-    const Step3 = () => (
-        <React.Fragment>
+            {/* <p>Reduced amout : {values.reduced_amount} €</p> */}
+
+            {/* <Step3/> */}
             <Typography component="h1" variant="h5">
                 {Config.messages.title3}
             </Typography>
 
             <Box mt={2} ml={2}>
                 <SelectPaymentMethod
-                    default_method={Config.payement_methods[0].id}
-                    methods={Config.payement_methods}
-                    onChange={handle_change}
+                    default_method={Config.payment_methods[0].id}
+                    methods={Config.payment_methods}
+                    onChange={handle_change("payment_method")}
                 />
             </Box>
-        </React.Fragment>
-    );
-
-    return (
-        <form > {/* onSubmit={this.handle_submit} */}
-            <Step1/>
-            <Step2/>
-            {/* <p>Reduced amout : {values.reduced_amount} €</p> */}
-            <Step3/>
 
             <Box mt={4}>
                 <Grid container justify="center">

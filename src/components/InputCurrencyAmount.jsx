@@ -80,4 +80,5 @@ export default function InputCurrencyAmount(props) {
 }
 
 InputCurrencyAmount.defaultProps = {
+    default_amount: "",
 }
