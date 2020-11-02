@@ -23,17 +23,50 @@
 /**************************************************************************************************/
 
 import React from "react";
-import ReactDOM from "react-dom";
 
-import App from "./App";
+// https://fontawesome.com/icons/coffee?style=solid
+// https://fontawesome.com/how-to-use/on-the-web/using-with/react
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+
+import {
+    faAddressCard,
+    faBuilding,
+    faCreditCard,
+    faEnvelope,
+    faHandHoldingHeart,
+    faHandHoldingMedical,
+    faMapMarker,
+    faMoneyCheck,
+    faQuestionCircle,
+    faUniversity,
+} from '@fortawesome/free-solid-svg-icons';
+
+import {
+} from '@fortawesome/free-regular-svg-icons';
+
+import {
+    faPaypal,
+} from '@fortawesome/free-brands-svg-icons';
 
 /**************************************************************************************************/
 
-console.log('Start React Application');
+library.add(
+    faAddressCard,
+    faBuilding,
+    faCreditCard,
+    faEnvelope,
+    faHandHoldingHeart,
+    faHandHoldingMedical,
+    faMapMarker,
+    faMoneyCheck,
+    faPaypal,
+    faQuestionCircle,
+    faUniversity,
+);
 
-// Application is wrapped in <div id='app'></div>
-const wrapper = document.getElementById('app');
-if (wrapper)
-    ReactDOM.render(<App />, wrapper);
-else
-    console.log('Element id=app not found in the dom');
+// <FontAwesomeIcon icon={["fas", "coffee"]} />
+// <FontAwesomeIcon icon={["far", "coffee"]} />
+// <FontAwesomeIcon icon={["fab", "github"]} />
+// const element = <FontAwesomeIcon icon={faCoffee} />

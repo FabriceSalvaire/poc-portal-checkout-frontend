@@ -1,9 +1,62 @@
 // -*- mode: rjsx; create-lockfiles: nil -*-
 // .#Foo.js files confuse create-react-app start
 
+/***************************************************************************************************
+ *
+ * Portal — 
+ * Copyright (C) 2020 Fabrice Salvaire
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **************************************************************************************************/
+
 /**************************************************************************************************/
 
 import React, { useState, useEffect } from "react";
+
+import clsx from 'clsx';
+
+import Avatar from '@material-ui/core/Avatar';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Grid from '@material-ui/core/Grid';
+import Input from '@material-ui/core/Input';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import InputLabel from '@material-ui/core/InputLabel';
+import Link from '@material-ui/core/Link';
+import MenuItem from '@material-ui/core/MenuItem';
+import Paper from '@material-ui/core/Paper';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import Typography from '@material-ui/core/Typography';
+
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import CreditCardIcon from '@material-ui/icons/CreditCard';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+import { makeStyles, useStyles, withStyles } from '@material-ui/core/styles';
 
 // https://www.google.com/recaptcha
 //   https://developers.google.com/recaptcha/docs/v3
@@ -19,107 +72,324 @@ import {
 
 import { loadStripe } from "@stripe/stripe-js";
 
-import "./App.scss";
-
 /**************************************************************************************************/
 
-const stripe_public_api_key = "pk_test_51HdczbBKQhCtA3D9aKEImtHELwbA2BGFlSnO4kfki1mjjs8xf0ZuptlEMy5WUn6S6YX2MUb1rUDm2pArLiV4qH9Y00b2ZFJAWk";
-const recaptcha_site_key = '6LeTlt0ZAAAAAEH8r-8lYhgdzfoKMxkWVA8BMklX';
+// import "./App.scss";
+
+import * as Config from "./Config";
+
+import InputCurrencyAmount from "./InputCurrencyAmount";
+import SelectCountry from "./SelectCountry";
+import SelectCurrencyAmount from "./SelectCurrencyAmount";
+import SelectDonatorType from "./SelectDonatorType";
+import SelectPaymentMethod from "./SelectPaymentMethod";
+import SelectPaymentOccurrence from "./SelectPaymentOccurrence";
+
+import "./SvgIcons";
 
 /**************************************************************************************************/
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
-const stripe_promise = loadStripe(stripe_public_api_key);
+const stripe_promise = loadStripe(Config.stripe_public_api_key);
 
 /**************************************************************************************************/
 
-class CheckoutForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            name: "John Doe",
-            email: "john.doe@example.com",
-            amount: 50.00,
-        };
-        this.handle_change = this.handle_change.bind(this);
-        this.handle_submit = this.handle_submit.bind(this);
-        this.handle_verify = this.handle_verify.bind(this);
-    }
+const useFormStyle = makeStyles((theme) => ({
+    // Fixme: negative margin ???
+    // https://material-ui.com/components/grid/#negative-margin
+    // https://blog.logrocket.com/the-material-ui-grid-system/#:~:text=Material%2DUI%20uses%20a%20negative,spacing%3D%7B0%7D%20(default)
+    "grid_padding_fix": {
+        padding: theme.spacing(1),
+    },
+}));
 
-    handle_change(event) {
-        let field = event.target.name;
+// class CheckoutForm extends React.Component {
+function CheckoutForm() {
+    const classes = useFormStyle();
+    const [values, set_values] = React.useState({
+        forname: 'John',
+        name: 'Doe',
+        email: 'john.doe@example.com',
+        amount: '', // default_amount
+        reduced_amount: '', // compute_reduced_amount(default_amount),
+        tax_receipt: true,
+        country: "France",
+    });
+
+    const handle_change = (prop) => (event) => {
         let value = event.target.value;
-        console.log(field, value);
-        this.setState({
-            ...this.state,
-            [field]: value,
-        });
-    }
-
-    handle_verify(token) {
-        console.log('recaptcha token:', token);
-    }
-
-    // const handle_submit = async (event) => {
-    async handle_submit(event) {
-        event.preventDefault();
-
-        const stripe = await stripe_promise;
-
-        let int_amount = Math.trunc(parseFloat(this.state.amount) * 100);
-        const data = {
-            "date": "2020-10-26T14:24:12.709Z", // Fixme: 
-            "int_amount": int_amount,
-            "donator_type": "individual",
-            "name": this.state.name,
-            "email": this.state.email,
-            // "callback_url": "string",
-            "success_suffix_url": "?success=true",
-            "cancel_suffix_url": "?canceled=true"
-        };
-        console.log(data);
-
-        const backend_url = "https://portal-demo-backend.fabrice-salvaire.fr";
-        const response = await fetch(backend_url + "/api/v1/donations/", {
-            method: "POST",
-            body: JSON.stringify(data)
-        });
-
-        const donation = await response.json();
-        console.log(donation);
-
-        // When the customer clicks on the button, redirect them to Checkout.
-        const result = await stripe.redirectToCheckout({
-            sessionId: donation.stripe_session_id,
-        });
-
-        if (result.error) {
-            // If `redirectToCheckout` fails due to a browser or network
-            // error, display the localized error message to your customer
-            // using `result.error.message`.
+        var other_values = {};
+        switch (prop) {
+        case "amount":
+            // compute_reduced_amount(amount)
+            break;
         }
+        set_values({ ...values, ...other_values, [prop]: value });
     };
 
-    render() {
-        return (
-            <div>
-                <GoogleReCaptcha onVerify={this.handle_verify} />
-                <form id="checkout_form" onSubmit={this.handle_submit}>
-                    <label>Name</label>
-                    <input name="name" type="text" value={this.state.name} onChange={this.handle_change} />
-                    <label>Email</label>
-                    <input name="email" type="email" value={this.state.email} onChange={this.handle_change} />
-                    <label>Amount</label>
-                    <span>
-                        <input name="amount" type="number" min="1" step="any" value={this.state.amount} onChange={this.handle_change} />
-                        <span className="currency">€</span>
-                    </span>
-                    <input type="submit" value="Checkout" />
-                </form>
-            </div>
-        );
-    }
+    // handle_verify(token) {
+    //     console.log('recaptcha token:', token);
+    // }
+
+    // // const handle_submit = async (event) => {
+    // async handle_submit(event) {
+    //     event.preventDefault();
+
+    //     const stripe = await stripe_promise;
+
+    //     let int_amount = Math.trunc(parseFloat(this.state.amount) * 100);
+    //     const data = {
+    //         "date": "2020-10-26T14:24:12.709Z", // Fixme: 
+    //         "int_amount": int_amount,
+    //         "donator_type": "individual",
+    //         "name": this.state.name,
+    //         "email": this.state.email,
+    //         // "callback_url": "string",
+    //         "success_suffix_url": "?success=true",
+    //         "cancel_suffix_url": "?canceled=true"
+    //     };
+    //     console.log(data);
+
+    //     const backend_url = "https://portal-demo-backend.fabrice-salvaire.fr";
+    //     const response = await fetch(backend_url + "/api/v1/donations/", {
+    //         method: "POST",
+    //         body: JSON.stringify(data)
+    //     });
+
+    //     const donation = await response.json();
+    //     console.log(donation);
+
+    //     // When the customer clicks on the button, redirect them to Checkout.
+    //     const result = await stripe.redirectToCheckout({
+    //         sessionId: donation.stripe_session_id,
+    //     });
+
+    //     if (result.error) {
+    //         // If `redirectToCheckout` fails due to a browser or network
+    //         // error, display the localized error message to your customer
+    //         // using `result.error.message`.
+    //     }
+    // };
+
+    // <GoogleReCaptcha onVerify={this.handle_verify} />
+
+    const Step1 = () => (
+        <React.Fragment>
+            <Typography component="h1" variant="h5">
+                {Config.messages.title1}
+            </Typography>
+
+            <Box mt={2} mb={2} ml={2}>
+                <Grid
+                    container
+                    direction="column"
+                    spacing={1}
+                >
+                    <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
+                        <Grid item>
+                            <SelectPaymentOccurrence onChange={handle_change}/>
+                        </Grid>
+                    </Grid>
+                    <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
+                        <Grid item>
+                            <SelectCurrencyAmount
+                                default_amount={Config.default_amounts[0]}
+                                amounts={Config.default_amounts}
+                                onChange={handle_change}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <InputCurrencyAmount
+                                id="amount"
+                                name="amount"
+                                label="Amount"
+                                variant="standard"
+                                default_amount={values.amount}
+                                onChange={handle_change}
+                            />
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Box>
+        </React.Fragment>
+    );
+
+    const Step2 = () => (
+        <React.Fragment>
+            <Typography component="h1" variant="h5">
+                {Config.messages.title2}
+            </Typography>
+
+            <Box mt={3} mb={2} ml={2}>
+                <Grid container direction="column" spacing={2}>
+                    <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
+                        <Grid item>
+                            <Typography component="h2" variant="h6">
+                                {Config.messages.i_represent}
+                            </Typography>
+                        </Grid>
+                        <SelectDonatorType />
+                    </Grid>
+                    <Grid item>
+                        <TextField
+                            id="email"
+                            name="email"
+                            label="Email Address"
+                            autoComplete="email"
+                            required
+                            variant="standard"
+                            type="email"
+                            value={values.email}
+                            onChange={handle_change('email')}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    name="tax_receipt"
+                                    color="primary"
+                                    checked={values.tax_receipt}
+                                    onChange={handle_change("tax_receipt")}
+                                />
+                            }
+                            label={Config.messages.i_would_like_to_receive_a_tax_receipt}
+                        />
+                    </Grid>
+                    <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
+                        <Grid item>
+                            <TextField
+                                id="forname"
+                                name="forname"
+                                label={Config.messages.forname}
+                                autoComplete="forname"
+                                required
+                                variant="standard"
+                                autoFocus
+                                value={values.forname}
+                                onChange={handle_change('forname')}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <TextField
+                                id="name"
+                                name="name"
+                                label={Config.messages.name}
+                                autoComplete="name"
+                                required
+                                variant="standard"
+                                autoFocus
+                                value={values.name}
+                                onChange={handle_change('name')}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid item>
+                        <TextField
+                            id="address"
+                            name="address"
+                            label={Config.messages.address}
+                            autoComplete="address"
+                            required
+                            variant="standard"
+                            autoFocus
+                            value={values.address}
+                            onChange={handle_change('address')}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <TextField
+                            id="complement"
+                            name="complement"
+                            label={Config.messages.complement}
+                            autoComplete="complement"
+                            required
+                            variant="standard"
+                            autoFocus
+                            value={values.complement}
+                            onChange={handle_change('complement')}
+                        />
+                    </Grid>
+                    <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
+                        <Grid item>
+                            <TextField
+                                id="zip_code"
+                                name="zip_code"
+                                label={Config.messages.zip_code}
+                                autoComplete="zip_code"
+                                required
+                                variant="standard"
+                                autoFocus
+                                value={values.zip_code}
+                                onChange={handle_change('zip_code')}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <TextField
+                                id="city"
+                                name="city"
+                                label={Config.messages.city}
+                                autoComplete="city"
+                                required
+                                variant="standard"
+                                autoFocus
+                                value={values.city}
+                                onChange={handle_change('city')}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid item>
+                        <FormControl>
+                            <InputLabel id="contry-label">{Config.messages.country}</InputLabel>
+                            <SelectCountry
+                                labelId="country-label"
+                                id="country"
+                                default_country={values.country}
+                                onChange={handle_change("country")}
+                            />
+                        </FormControl>
+                    </Grid>
+                </Grid>
+            </Box>
+        </React.Fragment>
+    );
+
+    const Step3 = () => (
+        <React.Fragment>
+            <Typography component="h1" variant="h5">
+                {Config.messages.title3}
+            </Typography>
+            <Box mt={2} ml={2}>
+                <SelectPaymentMethod
+                    default_method={Config.payement_methods[0].id}
+                    methods={Config.payement_methods}
+                    onChange={handle_change}
+                />
+            </Box>
+        </React.Fragment>
+    );
+
+    return (
+        <form > {/* onSubmit={this.handle_submit} */}
+            <Step1/>
+            <Step2/>
+            {/* <p>Reduced amout : {values.reduced_amount} €</p> */}
+            <Step3/>
+
+            <Box mt={4}>
+                <Grid container justify="center">
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                    >
+                        {Config.messages.submit_title(values.amout)}
+                    </Button>
+                </Grid>
+            </Box>
+        </form>
+    );
 }
 
 /**************************************************************************************************/
@@ -132,7 +402,13 @@ const Message = ({ message }) => (
 
 /**************************************************************************************************/
 
+const use_styles = makeStyles((theme) => ({
+  root: {
+  },
+}));
+
 export default function App() {
+    const classes = use_styles();
     const [message, set_message] = useState("");
 
     useEffect(() => {
@@ -144,11 +420,9 @@ export default function App() {
         }
 
         if (query.get("canceled")) {
-            set_message(
-                "Order canceled -- continue to shop around and checkout when you're ready."
-            );
+            set_message("Order canceled -- continue to shop around and checkout when you're ready.");
         }
-    }, []);
+    });
 
     // <GoogleReCaptchaProvider
     //     reCaptchaKey="[Your recaptcha key]"
@@ -168,9 +442,16 @@ export default function App() {
         <Message message={message} />
     ) : (
         <GoogleReCaptchaProvider
-            reCaptchaKey={recaptcha_site_key}
+            reCaptchaKey={Config.recaptcha_site_key}
         >
-            <CheckoutForm />
+            <CssBaseline />
+            <Container component="main" maxWidth="lg">
+                <Paper className={classes.root} elevation={3}>
+                    <Box p={3}>
+                        <CheckoutForm />
+                    </Box>
+                </Paper>
+            </Container>
         </GoogleReCaptchaProvider>
     );
 }

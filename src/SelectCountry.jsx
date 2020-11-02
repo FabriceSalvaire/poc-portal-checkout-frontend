@@ -22,18 +22,42 @@
 
 /**************************************************************************************************/
 
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { useState } from "react";
 
-import App from "./App";
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 
 /**************************************************************************************************/
 
-console.log('Start React Application');
+import * as CountryList from "./CountryList";
 
-// Application is wrapped in <div id='app'></div>
-const wrapper = document.getElementById('app');
-if (wrapper)
-    ReactDOM.render(<App />, wrapper);
-else
-    console.log('Element id=app not found in the dom');
+/**************************************************************************************************/
+
+export default function SelectCountry(props) {
+    const country_number = CountryList.name_to_data[props.default_country].number;
+
+    const [country, set_country] = useState(country_number);
+
+    const handle_change = (event) => {
+        let new_country_number = event.target.value;
+        set_country(new_country_number);
+        props.onChange(CountryList.number_to_data[new_country_number].name);
+    };
+
+    return (
+        <Select
+            labelId={props.labelId}
+            id={props.id}
+            value={country}
+            onChange={handle_change}
+        >
+            { props.country_list.map((country, index) => (
+                <MenuItem value={country.number}>{country.name}</MenuItem>
+            ))}
+        </Select>
+    );
+}
+
+SelectCountry.defaultProps = {
+    country_list: CountryList.country_list_iso_data,
+}

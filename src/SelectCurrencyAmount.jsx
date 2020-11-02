@@ -22,18 +22,37 @@
 
 /**************************************************************************************************/
 
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { useState } from "react";
 
-import App from "./App";
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
 /**************************************************************************************************/
 
-console.log('Start React Application');
+export default function SelectCurrencyAmount(props) {
+    const [amount, set_amount] = useState(props.default_amount);
 
-// Application is wrapped in <div id='app'></div>
-const wrapper = document.getElementById('app');
-if (wrapper)
-    ReactDOM.render(<App />, wrapper);
-else
-    console.log('Element id=app not found in the dom');
+    const handle_change = (event, new_value) => {
+        set_amount(new_value);
+        props.onChange(new_value);
+    };
+
+    return (
+        <ToggleButtonGroup
+            value={amount}
+            exclusive
+            onChange={handle_change}
+            aria-label="text alignment"
+        >
+            { props.amounts.map((amount, index) => (
+                <ToggleButton value={amount} aria-label="">
+                    {amount} {props.currency}
+                </ToggleButton>
+            ))}
+        </ToggleButtonGroup>
+    );
+}
+
+SelectCurrencyAmount.defaultProps = {
+    currency: "€",
+}
