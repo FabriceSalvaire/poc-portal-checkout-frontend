@@ -103,6 +103,7 @@ function CheckoutForm() {
         email: "john.doe@example.com",
         forname: "John",
         name: "Doe",
+        organisation_name: "",
         tax_receipt: true,
         address: "",
         complement: "",
@@ -291,32 +292,46 @@ function CheckoutForm() {
                             label={Config.messages.i_would_like_to_receive_a_tax_receipt}
                         />
                     </Grid>
-                    <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
-                        <Grid item>
-                            <TextField
-                                id="forname"
-                                name="forname"
-                                label={Config.messages.forname}
-                                autoComplete="forname"
-                                required
-                                variant="standard"
-                                value={values.forname}
-                                onChange={handle_change_event("forname")}
-                            />
+                    { values.donator_type === "individual" ? (
+                        <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
+                            <Grid item>
+                                <TextField
+                                    id="forname"
+                                    name="forname"
+                                    label={Config.messages.forname}
+                                    autoComplete="forname"
+                                    required
+                                    variant="standard"
+                                    value={values.forname}
+                                    onChange={handle_change_event("forname")}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <TextField
+                                    id="name"
+                                    name="name"
+                                    label={Config.messages.name}
+                                    autoComplete="name"
+                                    required
+                                    variant="standard"
+                                    value={values.name}
+                                    onChange={handle_change_event("name")}
+                                />
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <TextField
-                                id="name"
-                                name="name"
-                                label={Config.messages.name}
-                                autoComplete="name"
-                                required
-                                variant="standard"
-                                value={values.name}
-                                onChange={handle_change_event("name")}
-                            />
-                        </Grid>
-                    </Grid>
+                    ) : (
+                        <TextField
+                            id="organisation_name"
+                            name="organisation_name"
+                            label={Config.messages.organisation_name}
+                            autoComplete="organisation_name"
+                            required
+                            variant="standard"
+                            value={values.organisation_name}
+                            onChange={handle_change_event("organisation_name")}
+                        />
+
+                    ) }
                     <Grid item>
                         <TextField
                             id="address"
