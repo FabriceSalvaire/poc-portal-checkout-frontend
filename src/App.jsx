@@ -56,7 +56,7 @@ import CreditCardIcon from '@material-ui/icons/CreditCard';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { makeStyles, useStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles, useStyles, withStyles, ThemeProvider } from '@material-ui/core/styles';
 
 // https://www.google.com/recaptcha
 //   https://developers.google.com/recaptcha/docs/v3
@@ -77,6 +77,7 @@ import { loadStripe } from "@stripe/stripe-js";
 // import "./App.scss";
 
 import * as Config from "./Config";
+import { theme } from "./Theme";
 
 import InputCurrencyAmount from "./components/InputCurrencyAmount";
 import SelectCountry from "./components/SelectCountry";
@@ -402,13 +403,7 @@ const Message = ({ message }) => (
 
 /**************************************************************************************************/
 
-const use_styles = makeStyles((theme) => ({
-  root: {
-  },
-}));
-
 export default function App() {
-    const classes = use_styles();
     const [message, set_message] = useState("");
 
     useEffect(() => {
@@ -441,17 +436,19 @@ export default function App() {
     return message ? (
         <Message message={message} />
     ) : (
-        <GoogleReCaptchaProvider
-            reCaptchaKey={Config.recaptcha_site_key}
-        >
-            <CssBaseline />
-            <Container component="main" maxWidth="lg">
-                <Paper className={classes.root} elevation={3}>
-                    <Box p={3}>
-                        <CheckoutForm />
-                    </Box>
-                </Paper>
-            </Container>
-        </GoogleReCaptchaProvider>
+        <ThemeProvider theme={theme}>
+            <GoogleReCaptchaProvider
+                reCaptchaKey={Config.recaptcha_site_key}
+            >
+                <CssBaseline />
+                <Container component="main" maxWidth="lg">
+                    <Paper elevation={3}>
+                        <Box p={3}>
+                            <CheckoutForm />
+                        </Box>
+                    </Paper>
+                </Container>
+            </GoogleReCaptchaProvider>
+        </ThemeProvider>
     );
 }
