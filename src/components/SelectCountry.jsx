@@ -29,7 +29,7 @@ import Select from '@material-ui/core/Select';
 
 /**************************************************************************************************/
 
-import * as CountryList from "./CountryList";
+import * as CountryList from "../CountryList";
 
 /**************************************************************************************************/
 

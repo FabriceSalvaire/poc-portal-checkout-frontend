@@ -26,7 +26,6 @@ import React, { useState } from "react";
 
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import Tooltip from '@material-ui/core/Tooltip';
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
@@ -35,7 +34,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 /**************************************************************************************************/
 
-import * as Config from "./Config";
+import * as Config from "../Config";
 
 /**************************************************************************************************/
 
@@ -152,8 +151,8 @@ const theme = createMuiTheme({
 
 /**************************************************************************************************/
 
-export default function SelectDonatorType(props) {
-    const [method, set_method] = useState("individual");
+export default function SelectPaymentOccurrence(props) {
+    const [method, set_method] = useState("once");
 
     const handle_change = (event, new_value) => {
         set_method(new_value);
@@ -168,18 +167,16 @@ export default function SelectDonatorType(props) {
                 onChange={handle_change}
                 aria-label="text alignment"
             >
-                <ToggleButton value="individual" aria-label="">
-                    <span><FontAwesomeIcon icon="address-card" /> {Config.messages.an_individual}</span>
+                <ToggleButton value="once" aria-label="">
+                    <span><FontAwesomeIcon icon="hand-holding-heart" /> {Config.messages.once}</span>
                 </ToggleButton>
-                <Tooltip title={Config.messages.organisation_tip}>
-                    <ToggleButton value="organisation" aria-label="">
-                        <span><FontAwesomeIcon icon="university" /> {Config.messages.an_organisation}</span>
-                    </ToggleButton>
-                </Tooltip>
+                <ToggleButton value="monthly" aria-label="">
+                    <span><FontAwesomeIcon icon="hand-holding-medical" /> {Config.messages.monthly}</span>
+                </ToggleButton>
             </ToggleButtonGroup>
         </ThemeProvider>
     );
 }
 
-SelectDonatorType.defaultProps = {
+SelectPaymentOccurrence.defaultProps = {
 }

@@ -78,14 +78,14 @@ import { loadStripe } from "@stripe/stripe-js";
 
 import * as Config from "./Config";
 
-import InputCurrencyAmount from "./InputCurrencyAmount";
-import SelectCountry from "./SelectCountry";
-import SelectCurrencyAmount from "./SelectCurrencyAmount";
-import SelectDonatorType from "./SelectDonatorType";
-import SelectPaymentMethod from "./SelectPaymentMethod";
-import SelectPaymentOccurrence from "./SelectPaymentOccurrence";
+import InputCurrencyAmount from "./components/InputCurrencyAmount";
+import SelectCountry from "./components/SelectCountry";
+import SelectCurrencyAmount from "./components/SelectCurrencyAmount";
+import SelectDonatorType from "./components/SelectDonatorType";
+import SelectPaymentMethod from "./components/SelectPaymentMethod";
+import SelectPaymentOccurrence from "./components/SelectPaymentOccurrence";
 
-import "./SvgIcons";
+import "./components/SvgIcons";
 
 /**************************************************************************************************/
 
