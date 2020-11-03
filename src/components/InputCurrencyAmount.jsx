@@ -30,15 +30,20 @@ import TextField from '@material-ui/core/TextField';
 /**************************************************************************************************/
 
 export default function InputCurrencyAmount(props) {
+    const check_amount = (amount) => {
+        if (props.allow_empty && amount === "")
+            return true;
+        return RegExp(props.float_regexp).test(amount);
+    };
+
     const [amount, set_amount] = useState(props.default_amount);
-    const [amount_error, set_amount_error] = useState(false);
+    const [amount_error, set_amount_error] = useState(!check_amount(amount));
 
     const handle_change = (event) => {
         let value = event.target.value;
-        // Accept: 123 123,4 123,45
-        let is_float = value.match(/^[1-9][0-9]*([,][0-9]([0-9])?)?$/);
-        let amount = Number.parseFloat(value);
-        console.log("amount changed:", amount, is_float);
+        let is_float = check_amount(value);
+        // let amount = Number.parseFloat(value);
+        // console.log("amount changed:", amount, is_float);
         set_amount_error(!is_float);
         set_amount(value);
         if (is_float)
@@ -67,18 +72,29 @@ export default function InputCurrencyAmount(props) {
             name={props.name}
             label={props.label}
             variant={props.variant}
-            InputProps={{
-                endAdornment: <InputAdornment position="end">€</InputAdornment>
-            }}
+            InputProps={
+                props.currency_position === "start" ?
+                    { startAdornment: <InputAdornment position="start">{props.currency}</InputAdornment> }
+                :
+                    { endAdornment: <InputAdornment position="end">{props.currency}</InputAdornment> }
+            }
             required
             value={amount}
             onChange={handle_change}
             error={amount_error}
-            helperText={amount_error ? "Invalid amount" :  ""}
+            helperText={amount_error ? props.invalid_amount :  ""}
         />
     );
 }
 
 InputCurrencyAmount.defaultProps = {
+    // currency: "$",
+    // currency_position: "start",
+    currency: "€",
+    currency_position: "end",
     default_amount: "",
+    invalid_amount: "Invalid amount",
+    // Accept: 123 123,4 123,45
+    allow_empty: true,
+    float_regexp: "^[1-9][0-9]*([,][0-9]([0-9])?)?$",
 }

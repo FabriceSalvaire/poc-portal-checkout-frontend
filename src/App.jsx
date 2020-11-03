@@ -241,6 +241,7 @@ function CheckoutForm() {
                                 name="amount"
                                 label="Amount"
                                 variant="standard"
+                                invalid_amount={Config.messages.invalid_amount}
                                 /* default_amount={values.is_preset_amount ? "" : values.amount} */
                                 onChange={handle_custom_amount_change}
                             />

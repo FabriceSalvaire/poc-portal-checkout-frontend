@@ -89,6 +89,8 @@ export const messages = {
     bank_transfer: "Virement",
     check: "Chèque",
 
+    invalid_amount: "montant invalide",
+
     submit_title: amount => `Je donne ${amount} € maintenant`,
 
     // Les reçus fiscaux (en France uniquement) sont envoyés par courriel en mars/avril 2021 (avant la déclaration d’impôt) pour les dons versés en 2020
