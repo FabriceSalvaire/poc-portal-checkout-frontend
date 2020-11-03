@@ -37,28 +37,31 @@ import * as Config from "../Config";
 /**************************************************************************************************/
 
 export default function SelectDonatorType(props) {
-    const [method, set_method] = useState("individual");
+    const [type, set_type] = useState("individual");
 
     const handle_change = (event, new_value) => {
-        set_method(new_value);
-        props.onChange(new_value);
+        console.log(`SelectDonatorType.handle_change ${new_value}`);
+        if (new_value !== null) {
+            set_type(new_value);
+            props.onChange(new_value);
+        }
     };
 
     return (
         <ToggleButtonGroup
-            value={method}
+            value={type}
             exclusive
             onChange={handle_change}
-            aria-label="text alignment"
+            aria-label=""
         >
             <ToggleButton value="individual" aria-label="">
                 <span><FontAwesomeIcon icon="address-card" /> {Config.messages.an_individual}</span>
             </ToggleButton>
-            <Tooltip title={Config.messages.organisation_tip}>
                 <ToggleButton value="organisation" aria-label="">
+            <Tooltip title={Config.messages.organisation_tip}>
                     <span><FontAwesomeIcon icon="university" /> {Config.messages.an_organisation}</span>
-                </ToggleButton>
             </Tooltip>
+                </ToggleButton>
         </ToggleButtonGroup>
     );
 }
