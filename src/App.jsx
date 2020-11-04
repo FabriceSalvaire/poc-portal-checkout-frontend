@@ -35,6 +35,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
 import Paper from "@material-ui/core/Paper";
+import Switch from "@material-ui/core/Switch";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 
@@ -61,6 +62,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import * as Config from "./Config";
 import { theme } from "./Theme";
 
+import FieldsetWrapper from "./components/FieldsetWrapper";
 import InputCurrencyAmount from "./components/InputCurrencyAmount";
 import SelectCountry from "./components/SelectCountry";
 import SelectCurrencyAmount from "./components/SelectCurrencyAmount";
@@ -90,6 +92,7 @@ const useFormStyle = makeStyles((theme) => ({
 // class CheckoutForm extends React.Component {
 function CheckoutForm() {
     const classes = useFormStyle();
+    const [on_sr, set_on_sr] = React.useState(false);
     // const [is_preset_amount, set_is_preset_amount] = React.useState(true);
     const [values, set_values] = React.useState({
         // Step 1
@@ -113,6 +116,10 @@ function CheckoutForm() {
         // Step 3
         payment_method: "card",
     });
+
+    const toggle_on_sr = (event) => {
+        set_on_sr(event.target.checked);
+    }
 
     const set_value = (prop, value) => {
         console.log(`value changed: ${prop} = ${value}`);
@@ -207,7 +214,25 @@ function CheckoutForm() {
     // );
 
     return (
-        <form > {/* onSubmit={this.handle_submit} */}
+        <form
+            /* id="" */
+            /* name="donation-checkout-form" */
+            autocomplete="on"
+            novalidate
+            label="Form"
+        > {/* onSubmit={this.handle_submit} */}
+            <FormControlLabel
+                control={
+                    <Switch
+                        name="accessibility-mode-checkbox"
+                        color="primary"
+                        checked={on_sr}
+                        onChange={toggle_on_sr}
+                    />
+                }
+                label={Config.messages.accessibility_checkbox_title}
+            />
+
             {/* <Step1/> */}
             <Typography component="h1" variant="h5">
                 {Config.messages.title1}
@@ -219,34 +244,40 @@ function CheckoutForm() {
                     direction="column"
                     spacing={1}
                 >
-                    <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
-                        <Grid item>
-                            <SelectDonationOccurrence
-                                init_choice={values.donation_occurence}
-                                onChange={handle_change("donation_occurence")}
-                            />
+                    <FieldsetWrapper on_sr={on_sr} legend={Config.messages.donation_occurence_fieldset_legend}>
+                        <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
+                            <Grid item>
+                                <SelectDonationOccurrence
+                                    init_choice={values.donation_occurence}
+                                    onChange={handle_change("donation_occurence")}
+                                />
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
-                        <Grid item>
-                            <SelectCurrencyAmount
-                                init_choice={values.is_preset_amount ? values.preset_amount : null}
-                                amounts={Config.default_amounts}
-                                onChange={handle_preset_amount_change}
-                            />
+                    </FieldsetWrapper>
+                    <FieldsetWrapper on_sr={on_sr} legend={Config.messages.amount_fieldset_legend}>
+                        <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
+                            <Grid item>
+                                <SelectCurrencyAmount
+                                    label={Config.messages.amount_fieldset_legend}
+                                    init_choice={values.is_preset_amount ? values.preset_amount : null}
+                                    amounts={Config.default_amounts}
+                                    onChange={handle_preset_amount_change}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <InputCurrencyAmount
+                                    id="amount"
+                                    name="amount"
+                                    label={Config.messages.input_amount_label}
+                                    variant="standard"
+                                    helper_text={Config.messages.input_amount_helper_text}
+                                    invalid_amount={Config.messages.invalid_amount}
+        /* default_amount={values.is_preset_amount ? "" : values.amount} */
+                                    onChange={handle_custom_amount_change}
+                                />
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <InputCurrencyAmount
-                                id="amount"
-                                name="amount"
-                                label="Amount"
-                                variant="standard"
-                                invalid_amount={Config.messages.invalid_amount}
-                                /* default_amount={values.is_preset_amount ? "" : values.amount} */
-                                onChange={handle_custom_amount_change}
-                            />
-                        </Grid>
-                    </Grid>
+                    </FieldsetWrapper>
                 </Grid>
             </Box>
 
@@ -405,11 +436,13 @@ function CheckoutForm() {
             </Typography>
 
             <Box mt={2} ml={2}>
-                <SelectPaymentMethod
-                    default_method={Config.payment_methods[0].id}
-                    methods={Config.payment_methods}
-                    onChange={handle_change("payment_method")}
-                />
+                <FieldsetWrapper on_sr={on_sr} legend={Config.messages.payment_method_fieldset_legend}>
+                    <SelectPaymentMethod
+                        default_method={Config.payment_methods[0].id}
+                        methods={Config.payment_methods}
+                        onChange={handle_change("payment_method")}
+                    />
+                </FieldsetWrapper>
             </Box>
 
             <Box mt={4}>
@@ -466,6 +499,8 @@ export default function App() {
     // >
     //     <YourApp />
     // </GoogleReCaptchaProvider>
+
+    // Fixme: select theme normal or AAA
 
     return message ? (
         <Message message={message} />

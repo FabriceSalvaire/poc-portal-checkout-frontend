@@ -24,8 +24,8 @@
 
 import React, { useState } from "react";
 
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import ToggleButton from '@material-ui/core/ToggleButton';
+import ToggleButtonGroup from '@material-ui/core/ToggleButtonGroup';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -39,9 +39,10 @@ export default function SelectDonationOccurrence(props) {
     const [type, set_type] = useState(props.init_choice);
 
     const handle_change = (event, new_value) => {
-        set_type(new_value);
-        props.onChange(new_value);
-        // Fixme: null
+        if (new_value !== null) {
+            set_type(new_value);
+            props.onChange(new_value);
+        }
     };
 
     return (
@@ -49,12 +50,12 @@ export default function SelectDonationOccurrence(props) {
             value={type}
             exclusive
             onChange={handle_change}
-            aria-label="text alignment"
+            /* aria-label="" */
         >
-            <ToggleButton value="once" aria-label="">
+            <ToggleButton value="once" /* aria-label="" */ >
                 <span><FontAwesomeIcon icon="hand-holding-heart" /> {Config.messages.once}</span>
             </ToggleButton>
-            <ToggleButton value="monthly" aria-label="">
+            <ToggleButton value="monthly" /* aria-label="" */ >
                 <span><FontAwesomeIcon icon="hand-holding-medical" /> {Config.messages.monthly}</span>
             </ToggleButton>
         </ToggleButtonGroup>

@@ -22,40 +22,27 @@
 
 /**************************************************************************************************/
 
-import React, { useState } from "react";
-
-import ToggleButton from '@material-ui/core/ToggleButton';
-import ToggleButtonGroup from '@material-ui/core/ToggleButtonGroup';
+import React from "react";
 
 /**************************************************************************************************/
 
-export default function SelectPaymentMethod(props) {
-    const [method, set_method] = useState(props.default_method);
-
-    const handle_change = (event, new_value) => {
-        if (new_value !== null) {
-            set_method(new_value);
-            props.onChange(new_value);
-        }
-    };
-
-    return (
-        <ToggleButtonGroup
-            value={method}
-            exclusive
-            onChange={handle_change}
-            /* aria-label={props.group_aria_label} */
-        >
-            { props.methods.map((method, index) => (
-                <ToggleButton key={props.key_prefix + index} value={method.id} /* aria-label="" */ >
-                    <span>{method.icon} {method.title}</span>
-                </ToggleButton>
-            ))}
-        </ToggleButtonGroup>
-    );
+export default function FieldsetWrapper(props) {
+    if (props.on_sr)
+        return (
+            <fieldset>
+                <legend>{props.legend}</legend>
+                {props.children}
+            </fieldset>
+        );
+    else
+        return (
+            <React.Fragment>
+                {props.children}
+            </React.Fragment>
+        );
 }
 
-SelectPaymentMethod.defaultProps = {
-    key_prefix: "SelectPaymentMethod",
-    // group_aria_label: "",  // use a fieldset
+FieldsetWrapper.defaultProps = {
+    on_sr: false,
+    legend: "",
 }

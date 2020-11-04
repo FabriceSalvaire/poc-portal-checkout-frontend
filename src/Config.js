@@ -54,10 +54,16 @@ export function get_net_stripe_amount(amount) {
 export const organisation_name = "Organisation";
 
 export const messages = {
+    accessibility_checkbox_title: "Activer le mode d'accessibilité avancé du formulaire",
+
     title1: `1. Je veux donner à ${organisation_name}`,
+    donation_occurence_fieldset_legend: "Choississez entre un don unique ou mensuel",
     once: "UNE FOIS",
     monthly: "TOUS LES MOIS",
-    another_amount: "Autres montant (ex 123.4)",
+    amount_fieldset_legend: "Choississez un montant",
+    input_amount_label: "Montant",
+    input_amount_helper_text: "Ou saisissez un montant libre, e.g. 123 ou 123,45",
+    invalid_amount: "montant invalide",
 
     title2: "2. Je complète mes informations",
     title2_tip: "Ces informations ne sont requises que pour des raisons pratiques et légales afin de pouvoir vous délivrer un reçu fiscal.",
@@ -84,12 +90,11 @@ export const messages = {
     // Si vous souhaitez devenir mécène de ${organisation_name} et apparaître sur cette page, contactez-nous.
 
     title3: "3. J’accède au paiement",
+    payment_method_fieldset_legend: "Choississez un moyen de paiement",
     card: "Carte Bancaire",
     // Paypal
     bank_transfer: "Virement",
     check: "Chèque",
-
-    invalid_amount: "montant invalide",
 
     submit_title: amount => `Je donne ${amount} € maintenant`,
 

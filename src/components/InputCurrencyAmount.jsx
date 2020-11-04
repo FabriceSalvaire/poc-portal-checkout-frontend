@@ -43,7 +43,6 @@ export default function InputCurrencyAmount(props) {
         let value = event.target.value;
         let is_float = check_amount(value);
         // let amount = Number.parseFloat(value);
-        // console.log("amount changed:", amount, is_float);
         set_amount_error(!is_float);
         set_amount(value);
         if (is_float)
@@ -78,11 +77,10 @@ export default function InputCurrencyAmount(props) {
                 :
                     { endAdornment: <InputAdornment position="end">{props.currency}</InputAdornment> }
             }
-            required
             value={amount}
             onChange={handle_change}
             error={amount_error}
-            helperText={amount_error ? props.invalid_amount :  ""}
+            helperText={amount_error ? props.invalid_amount :  props.helper_text}
         />
     );
 }
@@ -93,6 +91,8 @@ InputCurrencyAmount.defaultProps = {
     currency: "€",
     currency_position: "end",
     default_amount: "",
+    label: "Amount",
+    helper_text: "Enter an amount, e.g. 123,45",
     invalid_amount: "Invalid amount",
     // Accept: 123 123,4 123,45
     allow_empty: true,

@@ -24,8 +24,8 @@
 
 import React, { useState } from "react";
 
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import ToggleButton from '@material-ui/core/ToggleButton';
+import ToggleButtonGroup from '@material-ui/core/ToggleButtonGroup';
 
 /**************************************************************************************************/
 
@@ -43,10 +43,10 @@ export default function SelectCurrencyAmount(props) {
             value={amount}
             exclusive
             onChange={handle_change}
-            aria-label="text alignment"
+            aria-label={props.label}
         >
             { props.amounts.map((amount, index) => (
-                <ToggleButton key={props.key_prefix + index} value={amount} aria-label="">
+                <ToggleButton key={props.key_prefix + index} value={amount} aria-label={amount + props.currency}>
                     {amount} {props.currency}
                 </ToggleButton>
             ))}

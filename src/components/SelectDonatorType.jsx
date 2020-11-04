@@ -24,8 +24,8 @@
 
 import React, { useState } from "react";
 
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import ToggleButton from '@material-ui/core/ToggleButton';
+import ToggleButtonGroup from '@material-ui/core/ToggleButtonGroup';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
