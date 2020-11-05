@@ -31,22 +31,20 @@ import TextField from '@material-ui/core/TextField';
 
 export default function InputCurrencyAmount(props) {
     const check_amount = (amount) => {
-        if (props.allow_empty && amount === "")
+        if (!props.required && (amount === "" || amount == null))
             return true;
         return RegExp(props.float_regexp).test(amount);
     };
 
-    const [amount, set_amount] = useState(props.default_amount);
-    const [amount_error, set_amount_error] = useState(!check_amount(amount));
+    const [is_invalid_amount, set_is_invalid_amount] = useState(!check_amount(props.amount));
 
     const handle_change = (event) => {
         let value = event.target.value;
         let is_float = check_amount(value);
         // let amount = Number.parseFloat(value);
-        set_amount_error(!is_float);
-        set_amount(value);
+        set_is_invalid_amount(!is_float);
         if (is_float)
-            props.onChange(value);
+            props.on_change(value);
     };
 
     // <FormControl className={clsx(classes.margin, classes.withoutLabel, classes.textField)}>
@@ -60,7 +58,7 @@ export default function InputCurrencyAmount(props) {
     //         required
     //         value={values.amount}
     //         onChange={handle_change('amount')}
-    //         error={amount_error}
+    //         error={is_invalid_amount}
     //     />
     //     <FormHelperText id="standard-amount-helper-text">Amount</FormHelperText>
     // </FormControl>
@@ -77,10 +75,11 @@ export default function InputCurrencyAmount(props) {
                 :
                     { endAdornment: <InputAdornment position="end">{props.currency}</InputAdornment> }
             }
-            value={amount}
+            value={props.amount}
+            required={props.required}
             onChange={handle_change}
-            error={amount_error}
-            helperText={amount_error ? props.invalid_amount :  props.helper_text}
+            error={is_invalid_amount}
+            helperText={is_invalid_amount ? props.error_text :  props.helper_text}
         />
     );
 }
@@ -90,11 +89,11 @@ InputCurrencyAmount.defaultProps = {
     // currency_position: "start",
     currency: "€",
     currency_position: "end",
-    default_amount: "",
     label: "Amount",
     helper_text: "Enter an amount, e.g. 123,45",
-    invalid_amount: "Invalid amount",
+    error_text: "Invalid amount",
     // Accept: 123 123,4 123,45
-    allow_empty: true,
     float_regexp: "^[1-9][0-9]*([,][0-9]([0-9])?)?$",
+    required: false,
+    amount: "",
 }

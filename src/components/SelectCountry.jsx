@@ -41,7 +41,7 @@ export default function SelectCountry(props) {
     const handle_change = (event) => {
         let new_country_number = event.target.value;
         set_country(new_country_number);
-        props.onChange(CountryList.number_to_data[new_country_number].name);
+        props.on_change(CountryList.number_to_data[new_country_number].name);
     };
 
     return (

@@ -80,6 +80,53 @@ const stripe_promise = loadStripe(Config.stripe_public_api_key);
 
 /**************************************************************************************************/
 
+function AmountField(props) {
+    const classes = useFormStyle();
+    const [preset_amount, set_preset_amount] = React.useState(Config.default_amounts[0]);
+    const [custom_amount, set_custom_amount] = React.useState("");
+
+    const handle_preset_amount_change = (amount) => {
+        console.log(`handle_preset_amount_change ${amount}`);
+        set_preset_amount(amount);
+        set_custom_amount("");
+        props.on_change(amount);
+    };
+
+    const handle_custom_amount_change = (amount) => {
+        console.log(`handle_custom_amount_change ${amount}`);
+        set_preset_amount(null);
+        set_custom_amount(amount);
+        props.on_change(amount);
+    };
+
+    return (
+        <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
+            <Grid item>
+                <SelectCurrencyAmount
+                    label={Config.messages.amount_fieldset_legend}
+                    amounts={Config.default_amounts}
+                    amount={preset_amount}
+                    on_change={handle_preset_amount_change}
+                />
+            </Grid>
+            <Grid item>
+                <InputCurrencyAmount
+                    id="amount"
+                    name="amount"
+                    label={Config.messages.input_amount_label}
+                    variant="standard"
+                    helper_text={Config.messages.input_amount_helper_text}
+                    error_text={Config.messages.invalid_amount}
+                    amount={custom_amount}
+                    on_change={handle_custom_amount_change}
+                />
+            </Grid>
+        </Grid>
+    );
+}
+
+/**************************************************************************************************/
+
 const useFormStyle = makeStyles((theme) => ({
     // Fixme: negative margin ???
     // https://material-ui.com/components/grid/#negative-margin
@@ -93,13 +140,10 @@ const useFormStyle = makeStyles((theme) => ({
 function CheckoutForm() {
     const classes = useFormStyle();
     const [on_sr, set_on_sr] = React.useState(false);
-    // const [is_preset_amount, set_is_preset_amount] = React.useState(true);
     const [values, set_values] = React.useState({
         // Step 1
         donation_occurence: "once",
-        preset_amount: Config.default_amounts[0],
-        custom_amount: "",
-        is_preset_amount: true,
+        amount: null,
         reduced_amount: "", // compute_reduced_amount(default_amount),
         // Step 2
         donator_type: "individual",
@@ -141,23 +185,6 @@ function CheckoutForm() {
         let value = event.target.value;
         console.log(`handle_change ${prop} ${event} ${value}`);
         set_value(prop, value);
-    };
-
-    const handle_preset_amount_change = (amount) => {
-        console.log(`handle_preset_amount_change ${amount}`);
-        // set_is_preset_amount(true);
-        // set_value("preset_amount", amount);
-        set_values({ ...values, is_preset_amount: true, preset_amount: amount, custom_amount: "" });
-        console.log(values);
-    };
-
-    const handle_custom_amount_change = (amount) => {
-        console.log(`handle_custom_amount_change ${amount}`);
-        // if (values.is_preset_amount)
-        // set_is_preset_amount(false);
-        // set_value("amount", amount);
-        set_values({ ...values, is_preset_amount: false, preset_amount: null, custom_amount: amount });
-        console.log(values);
     };
 
     // handle_verify(token) {
@@ -217,8 +244,8 @@ function CheckoutForm() {
         <form
             /* id="" */
             /* name="donation-checkout-form" */
-            autocomplete="on"
-            novalidate
+            autoComplete="on"
+            /* novalidate */
             label="Form"
         > {/* onSubmit={this.handle_submit} */}
             <FormControlLabel
@@ -249,35 +276,12 @@ function CheckoutForm() {
                             <Grid item>
                                 <SelectDonationOccurrence
                                     init_choice={values.donation_occurence}
-                                    onChange={handle_change("donation_occurence")}
+                                    on_change={handle_change("donation_occurence")}
                                 />
                             </Grid>
                         </Grid>
                     </FieldsetWrapper>
-                    <FieldsetWrapper on_sr={on_sr} legend={Config.messages.amount_fieldset_legend}>
-                        <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
-                            <Grid item>
-                                <SelectCurrencyAmount
-                                    label={Config.messages.amount_fieldset_legend}
-                                    init_choice={values.is_preset_amount ? values.preset_amount : null}
-                                    amounts={Config.default_amounts}
-                                    onChange={handle_preset_amount_change}
-                                />
-                            </Grid>
-                            <Grid item>
-                                <InputCurrencyAmount
-                                    id="amount"
-                                    name="amount"
-                                    label={Config.messages.input_amount_label}
-                                    variant="standard"
-                                    helper_text={Config.messages.input_amount_helper_text}
-                                    invalid_amount={Config.messages.invalid_amount}
-        /* default_amount={values.is_preset_amount ? "" : values.amount} */
-                                    onChange={handle_custom_amount_change}
-                                />
-                            </Grid>
-                        </Grid>
-                    </FieldsetWrapper>
+                    <AmountField on_change={handle_change("amount")}/>
                 </Grid>
             </Box>
 
@@ -295,7 +299,7 @@ function CheckoutForm() {
                             </Typography>
                         </Grid>
                         <SelectDonatorType
-                            onChange={handle_change("donator_type")}
+                            on_change={handle_change("donator_type")}
                         />
                     </Grid>
                     <Grid item>
@@ -382,7 +386,6 @@ function CheckoutForm() {
                             name="complement"
                             label={Config.messages.complement}
                             autoComplete="complement"
-                            required
                             variant="standard"
                             value={values.complement}
                             onChange={handle_change_event("complement")}
@@ -421,7 +424,7 @@ function CheckoutForm() {
                                 labelId="country-label"
                                 id="country"
                                 default_country={values.country}
-                                onChange={handle_change("country")}
+                                on_change={handle_change("country")}
                             />
                         </FormControl>
                     </Grid>
@@ -440,7 +443,7 @@ function CheckoutForm() {
                     <SelectPaymentMethod
                         default_method={Config.payment_methods[0].id}
                         methods={Config.payment_methods}
-                        onChange={handle_change("payment_method")}
+                        on_change={handle_change("payment_method")}
                     />
                 </FieldsetWrapper>
             </Box>

@@ -30,17 +30,13 @@ import ToggleButtonGroup from '@material-ui/core/ToggleButtonGroup';
 /**************************************************************************************************/
 
 export default function SelectCurrencyAmount(props) {
-    const [amount, set_amount] = useState(props.init_choice);
-    console.log(`SelectCurrencyAmount ${amount}`)
-
     const handle_change = (event, new_value) => {
-        set_amount(new_value);
-        props.onChange(new_value);
+        props.on_change(new_value);
     };
 
     return (
         <ToggleButtonGroup
-            value={amount}
+            value={props.amount}
             exclusive
             onChange={handle_change}
             aria-label={props.label}

@@ -35,7 +35,7 @@ export default function SelectPaymentMethod(props) {
     const handle_change = (event, new_value) => {
         if (new_value !== null) {
             set_method(new_value);
-            props.onChange(new_value);
+            props.on_change(new_value);
         }
     };
 

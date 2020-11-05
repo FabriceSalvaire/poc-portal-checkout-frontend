@@ -43,7 +43,7 @@ export default function SelectDonatorType(props) {
         console.log(`SelectDonatorType.handle_change ${new_value}`);
         if (new_value !== null) {
             set_type(new_value);
-            props.onChange(new_value);
+            props.on_change(new_value);
         }
     };
 
