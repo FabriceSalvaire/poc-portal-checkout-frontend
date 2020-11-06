@@ -1,0 +1,104 @@
+step1:
+  title: 1. Je veux donner à Framasoft
+  monthly: tous les mois
+  oneshot: une fois
+  other: 'Autre montant (ex : {n})'
+  anonymous: Je veux que mon don reste anonyme
+  receipt: Je souhaite recevoir un reçu fiscal
+step2:
+  title: 2. Je complète mes informations
+  private: Confidentialité
+  private_tip: |-
+    Ces informations ne sont requises que pour des raisons pratiques et légales
+    afin de pouvoir vous délivrer un reçu fiscal.
+
+    Sachez également que vous pouvez vérifier si votre don a bien été effectué
+    dans la page « [Liste des dons](@:link.soutenir/stats) ».
+
+    Bien évidemment, vos nom et prénom y sont anonymisés.
+  type: Je représente
+  part: un particulier
+  corp: une structure
+  corp_tip: 'Entreprise, association, collectivité…'
+  mecenat: |-
+    Si vous souhaitez devenir mécène de @:txt.soft et
+    [apparaître sur cette page](@:link.soutenir/sponsors),
+    [contactez-nous](@:link.contact/#soutenir).
+  society: Raison sociale
+  society_ex: 'ex : Free Software Fondation'
+  society_email_ex: 'ex : contact@fsf.org'
+  nickname: Pseudonyme
+  nickname_ex: 'ex : Lady AAL'
+  lastname: Nom
+  lastname_ex: 'ex : Lovelace'
+  firstname: Prénom
+  firstname_ex: 'ex : Ada'
+  email: E-mail
+  email_ex: 'ex : a.lovelace@example.com'
+  address1: Adresse
+  address1_ex: 'ex : 12 rue de la liberté'
+  address2: Complément
+  address2_ex: 'ex : Bâtiment VI'
+  zip: Code postal
+  zip_ex: 'ex : 69007'
+  city: Ville
+  city_ex: 'ex : Lyon'
+  country: Pays
+  error_empty: Ce champ doit être renseigné.
+  error_email: Vous devez saisir une adresse email valide.
+step3:
+  title: 3. J’accède au paiement
+  defisc: Infos sur la défiscalisation
+  defisc_text: En France, grâce à la déduction d’impôts de {percent}, **votre don
+    de {amount}** vous coûtera {defisc}.
+  cb: Carte bancaire
+  vir: Virement
+  chq: Chèque
+  pp: Paypal
+  i_give: Je donne
+  monthly: par mois
+  now: maintenant
+  coord: Vos coordonnées sont notées.
+  email_send:
+    - Un email vient de vous être envoyé à l’adresse
+    - contenant un rappel des instructions ci-dessous.
+  ok: Ok, j’ai compris
+  modal_vir:
+    by: par virement bancaire
+    no_sepa: ' @:txt.soft ne propose pas de formulaire SEPA pour des prélèvements bancaires, mais vous pouvez nous faire un don par virement directement.<br /> Ainsi vous décidez de la somme, de la fréquence et vous pouvez le modifier à tout moment.'
+    to_finish: ' Pour finaliser votre don, merci de noter nos coordonnées bancaires :'
+    ref: ' Notez aussi cette <b>référence de paiement</b> qu’il faudra ajouter à la description du virement :'
+    to_bank: ' Voyez ensuite avec votre banque comment planifier le virement. Certaines banques permettent de gérer ça en ligne.'
+  modal_chq:
+    by: par chèque
+    to_finish: ' Pour finaliser votre don, merci de remplir votre chèque <b>à l’ordre de « Association @:txt.soft »</b> et de noter cette <b>référence de paiement au dos</b> :'
+    to_post: ' Envoyez ensuite votre chèque au siège l’association à cette adresse postale :'
+ask:
+  title: Questions
+  stop: |-
+    Les dons récurrents peuvent être stoppés à tout moment
+    [sur simple demande](@:link.contact/#soutenir).
+  edit: |-
+    Si vous souhaitez modifier votre don récurrent,
+    [contactez-nous](@:link.contact/#soutenir), nous stopperons les
+    prélèvements et vous pourrez refaire un don.
+  send: |-
+    Les reçus fiscaux (en France uniquement) sont envoyés par courriel en
+    mars/avril @:year.next (avant la déclaration d’impôt) pour les dons versés
+    en @:year.current
+  moral: |-
+    Les rapports d’activité et financier de l’association peuvent être consultés
+    depuis notre page de [présentation de l’association](@:link.soft/association)
+  alter1: |-
+    Pour [des raisons pratiques](@:link.contact/faq/#dons-alternatifs), nous
+    n’acceptons pas les dons depuis les plateformes de micro paiement
+    (Lilo, Flattr, Tipeee…) à l’exception de Liberapay
+  lp: Faire un don via Liberapay
+  alter2: |-
+    Nous n’acceptons pas non plus les dons en crypto-monnaie (Bitcoin, Ether,
+    Monero…) mais nous observons avec attention
+    [la monnaie libre Ğ1](https://duniter.org/fr/comprendre/)<.
+  other: |-
+    Si vous avez d’autres questions, [les réponses se trouvent peut-être
+    là](@:link.soutenir/#questions)…
+
