@@ -92,6 +92,8 @@ const useFormStyle = makeStyles((theme) => ({
 /**************************************************************************************************/
 
 function AmountField(props) {
+    // Manage preset and custom amount fields
+
     const classes = useFormStyle();
 
     const [preset_amount, set_preset_amount] = React.useState(Config.default_amounts[0]);
@@ -151,7 +153,7 @@ function Step1(props) {
 
     // Callback to forward change
     const on_change = (prop) => (value) => {
-        console.log(`on_change ${prop} ${value}`);
+        // console.log(`on_change ${prop} ${value}`);
         props.on_change(prop, value);
     };
 
@@ -184,8 +186,9 @@ function Step1(props) {
 function Step2(props) {
     const classes = useFormStyle();
 
-    const [values, set_values] = React.useState({
-        donator_type: "individual",
+    const [donator_type, set_donator_type] = React.useState("individual");
+
+    const default_values = {
         email: "john.doe@example.com",
         forname: "John",
         name: "Doe",
@@ -196,23 +199,25 @@ function Step2(props) {
         zip_code: "",
         city: "",
         country: "France",
-    });
+    };
 
     const set_value = (prop, value) => {
-        console.log(`value changed: ${prop} = ${value}`);
-        set_values({ ...values, [prop]: value });
+        // console.log(`value changed: ${prop} = ${value}`);
+        if (prop === "donator_type")
+            set_donator_type(value);
+        props.on_change(prop, value);
     };
 
     // Callback
     const on_change = (prop) => (value) => {
-        console.log(`on_change ${prop} ${value}`);
+        // console.log(`on_change ${prop} ${value}`);
         set_value(prop, value);
     };
 
     // Callback
     const on_change_event = (prop) => (event) => {
         let value = event.target.value;
-        console.log(`on_change ${prop} ${event} ${value}`);
+        // console.log(`on_change ${prop} ${event} ${value}`);
         set_value(prop, value);
     };
 
@@ -243,7 +248,7 @@ function Step2(props) {
                             required
                             variant="standard"
                             type="email"
-                            value={values.email}
+                            value={default_values.email}
                             onChange={on_change_event("email")}
                         />
                     </Grid>
@@ -253,14 +258,14 @@ function Step2(props) {
                                 <Checkbox
                                     name="tax_receipt"
                                     color="primary"
-                                    checked={values.tax_receipt}
+                                    checked={default_values.tax_receipt}
                                     onChange={on_change_event("tax_receipt")}
                                 />
                             }
                             label={Config.messages.i_would_like_to_receive_a_tax_receipt}
                         />
                     </Grid>
-                    { values.donator_type === "individual" ? (
+                    { donator_type === "individual" ? (
                         <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
                             <Grid item>
                                 <TextField
@@ -270,7 +275,7 @@ function Step2(props) {
                                     autoComplete="forname"
                                     required
                                     variant="standard"
-                                    value={values.forname}
+                                    value={default_values.forname}
                                     onChange={on_change_event("forname")}
                                 />
                             </Grid>
@@ -282,7 +287,7 @@ function Step2(props) {
                                     autoComplete="name"
                                     required
                                     variant="standard"
-                                    value={values.name}
+                                    value={default_values.name}
                                     onChange={on_change_event("name")}
                                 />
                             </Grid>
@@ -295,7 +300,7 @@ function Step2(props) {
                             autoComplete="organisation_name"
                             required
                             variant="standard"
-                            value={values.organisation_name}
+                            value={default_values.organisation_name}
                             onChange={on_change_event("organisation_name")}
                         />
 
@@ -308,7 +313,7 @@ function Step2(props) {
                             autoComplete="address"
                             required
                             variant="standard"
-                            value={values.address}
+                            value={default_values.address}
                             onChange={on_change_event("address")}
                         />
                     </Grid>
@@ -319,7 +324,7 @@ function Step2(props) {
                             label={Config.messages.complement}
                             autoComplete="complement"
                             variant="standard"
-                            value={values.complement}
+                            value={default_values.complement}
                             onChange={on_change_event("complement")}
                         />
                     </Grid>
@@ -332,7 +337,7 @@ function Step2(props) {
                                 autoComplete="zip_code"
                                 required
                                 variant="standard"
-                                value={values.zip_code}
+                                value={default_values.zip_code}
                                 onChange={on_change_event("zip_code")}
                             />
                         </Grid>
@@ -344,7 +349,7 @@ function Step2(props) {
                                 autoComplete="city"
                                 required
                                 variant="standard"
-                                value={values.city}
+                                value={default_values.city}
                                 onChange={on_change_event("city")}
                             />
                         </Grid>
@@ -355,7 +360,7 @@ function Step2(props) {
                             <SelectCountry
                                 labelId="country-label"
                                 id="country"
-                                default_country={values.country}
+                                default_country={default_values.country}
                                 on_change={on_change("country")}
                             />
                         </FormControl>
@@ -370,7 +375,8 @@ function Step2(props) {
 
 function Step3(props) {
     const on_change = (prop) => (value) => {
-        console.log(`on_change ${prop} ${value}`);
+        // console.log(`on_change ${prop} ${value}`);
+        props.on_change(prop, value);
     };
 
     return (
@@ -392,14 +398,16 @@ function Step3(props) {
 
 /**************************************************************************************************/
 
-// class CheckoutForm extends React.Component {
 function CheckoutForm() {
-    const classes = useFormStyle();
-    const [on_sr, set_on_sr] = React.useState(false);
+    const [on_accessibility_mode, set_on_accessibility_mode] = React.useState(false);
 
-    const toggle_on_sr = (event) => {
-        set_on_sr(event.target.checked);
-    }
+    const toggle_accessibility_mode = (event) => {
+        set_on_accessibility_mode(event.target.checked);
+    };
+
+    const on_change = (prop, value) => {
+        console.log(`on_change ${prop} ${value}`);
+    };
 
     // reduced_amount: "", // compute_reduced_amount(default_amount),
     // var other_values = {};
@@ -411,7 +419,7 @@ function CheckoutForm() {
 
     // handle_verify(token) {
     //     console.log("recaptcha token:", token);
-    // }
+    // };
 
     // // const handle_submit = async (event) => {
     // async handle_submit(event) {
@@ -455,13 +463,6 @@ function CheckoutForm() {
 
     // <GoogleReCaptcha onVerify={this.handle_verify} />
 
-    // Note: don't wrap part of the JSX this in:
-    //   https://github.com/mui-org/material-ui/issues/783 — [TextField] loses focus on rerender
-    // const Step1 = () => (
-    //     <React.Fragment>
-    //     </React.Fragment>
-    // );
-
     return (
         <form
         /* id="" */
@@ -475,17 +476,17 @@ function CheckoutForm() {
                     <Switch
                         name="accessibility-mode-checkbox"
                         color="primary"
-                        checked={on_sr}
-                        onChange={toggle_on_sr}
+                        checked={on_accessibility_mode}
+                        onChange={toggle_accessibility_mode}
                     />
                 }
                 label={Config.messages.accessibility_checkbox_title}
             />
 
-            <Step1 />
-            <Step2 />
+            <Step1 on_change={on_change} />
+            <Step2 on_change={on_change} />
             {/* <p>Reduced amout : {values.reduced_amount} €</p> */}
-            <Step3 />
+            <Step3 on_change={on_change} />
 
             <Box mt={4}>
                 <Grid container justify="center">
