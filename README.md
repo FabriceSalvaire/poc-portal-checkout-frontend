@@ -1,20 +1,33 @@
-# React Donation Checkout Frontend styled with Material Design
+# Donation Checkout Frontend
 
 This application implements a donation checkout frontend using the [React](https://reactjs.org)
 framework (16.8 hooks) and [Material-UI](https://material-ui.com) React components for [Material
 Design](https://material.io/design).
 
+## Features
+
+* implement [WAI-ARIA](https://www.w3.org/TR/wai-aria) for accessibility
+
 # Alternative Implementations
 
-## Framasoft Home Page / Page d'accueil du réseau Framasoft
+* [Framasoft](https://framasoft.org/fr/#soutenir) which uses [Vue.js](https://vuejs.org) and
+[BootstrapVue](https://bootstrap-vue.org).
 
-[Framasoft](https://framasoft.org/fr/#soutenir) site uses the [Vue.js](https://vuejs.org) framework
-and Sass for stylesheets.
+# Discussion on the implementation
 
-* https://framagit.org/framasoft/accueil
-* https://framagit.org/framasoft/accueil/-/tree/master/app/components/partials/Soutenir
-* https://framagit.org/framasoft/accueil/-/blob/master/app/locales/fr/form.yml
-* https://framagit.org/framasoft/accueil/-/blob/master/app/assets/scss/support.scss
+Actually popular frameworks are, sorted by trends:
+
+1. [React](https://reactjs.org) backed by Facebook and the framework used by Wordpress
+1. [Angular](https://angular.io) backed by Google and the successor of AngularJS
+1. [Vue.js](https://vuejs.org) a popular framework created by Evan You, used by Alibaba
+
+* [PReact](https://preactjs.com) a lightweight counterpart nearly compatible with the React API (4kB)
+* [Riot](https://riot.js.org) a 7kB framework
+* [Polymer](https://www.polymer-project.org)
+
+## Issues
+
+* duplicated code to to enforce that at least one toggle button must be active
 
 # Running and Building the Application
 
