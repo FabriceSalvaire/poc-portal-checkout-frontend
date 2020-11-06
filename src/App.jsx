@@ -93,9 +93,9 @@ const useFormStyle = makeStyles((theme) => ({
 
 function AmountField(props) {
     // Manage preset and custom amount fields
-
     const classes = useFormStyle();
 
+    // Internal states
     const [preset_amount, set_preset_amount] = React.useState(props.default_preset_amount);
     const [custom_amount, set_custom_amount] = React.useState("");
 
@@ -192,12 +192,8 @@ function Step1(props) {
 function Step2(props) {
     const classes = useFormStyle();
 
-    const [donator_type, set_donator_type] = React.useState("individual");
-
     const set_value = (prop, value) => {
         // console.log(`value changed: ${prop} = ${value}`);
-        if (prop === "donator_type")
-            set_donator_type(value);
         props.on_change(prop, value);
     };
 
@@ -229,6 +225,7 @@ function Step2(props) {
                             </Typography>
                         </Grid>
                         <SelectDonatorType
+                            default_donator_type={props.values.default_donator_type}
                             on_change={on_change("donator_type")}
                         />
                     </Grid>
@@ -258,7 +255,7 @@ function Step2(props) {
                             label={Config.messages.i_would_like_to_receive_a_tax_receipt}
                         />
                     </Grid>
-                    { donator_type === "individual" ? (
+                    { props.values.donator_type === "individual" ? (
                         <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
                             <Grid item>
                                 <TextField
@@ -394,7 +391,7 @@ function Step3(props) {
 function CheckoutForm() {
     const [on_accessibility_mode, set_on_accessibility_mode] = React.useState(false);
 
-    // Fixme: design
+    // Fixme: state design
     //   We must store field values in a state
     //   we must pass default values, else we would have to get it from the DOM ...
     const [values, set_values] = React.useState({
@@ -404,6 +401,7 @@ function CheckoutForm() {
 
         // Step2
         email: "john.doe@example.com",
+        donator_type: "individual",
         forname: "John",
         name: "Doe",
         organisation_name: "",
