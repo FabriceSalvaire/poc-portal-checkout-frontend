@@ -32,7 +32,8 @@
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public --no-dll",
     "build-storybook": "build-storybook -s public --no-dll",
-    "analyze": "source-map-explorer 'build/static/js/*.js'"
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "compress": "gzipper compress ./build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -60,6 +61,7 @@
     "@storybook/preset-create-react-app": "^3.1.4",
     "@storybook/react": "^6.0.28",
     "babel-loader": "^8.1.0",
+    "gzipper": "^4.3.0",
     "react-is": "^17.0.1",
     "react-styleguidist": "^11.1.1"
   }
