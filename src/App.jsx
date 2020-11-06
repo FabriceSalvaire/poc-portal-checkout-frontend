@@ -96,7 +96,7 @@ function AmountField(props) {
 
     const classes = useFormStyle();
 
-    const [preset_amount, set_preset_amount] = React.useState(Config.default_amounts[0]);
+    const [preset_amount, set_preset_amount] = React.useState(props.default_preset_amount);
     const [custom_amount, set_custom_amount] = React.useState("");
 
     // Forward change
@@ -171,10 +171,16 @@ function Step1(props) {
                 >
                     <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
                         <Grid item>
-                            <SelectDonationOccurrence on_change={on_change("donation_occurrence")} />
+                            <SelectDonationOccurrence
+                                default_donation_occurrence={props.values.donation_occurrence}
+                                on_change={on_change("donation_occurrence")}
+                            />
                         </Grid>
                     </Grid>
-                    <AmountField on_change={on_change("amount")} />
+                    <AmountField
+                        default_preset_amount={props.values.amount}
+                        on_change={on_change("amount")}
+                    />
                 </Grid>
             </Box>
         </React.Fragment>
@@ -187,19 +193,6 @@ function Step2(props) {
     const classes = useFormStyle();
 
     const [donator_type, set_donator_type] = React.useState("individual");
-
-    const default_values = {
-        email: "john.doe@example.com",
-        forname: "John",
-        name: "Doe",
-        organisation_name: "",
-        tax_receipt: true,
-        address: "",
-        complement: "",
-        zip_code: "",
-        city: "",
-        country: "France",
-    };
 
     const set_value = (prop, value) => {
         // console.log(`value changed: ${prop} = ${value}`);
@@ -248,7 +241,7 @@ function Step2(props) {
                             required
                             variant="standard"
                             type="email"
-                            value={default_values.email}
+                            value={props.values.email}
                             onChange={on_change_event("email")}
                         />
                     </Grid>
@@ -258,7 +251,7 @@ function Step2(props) {
                                 <Checkbox
                                     name="tax_receipt"
                                     color="primary"
-                                    checked={default_values.tax_receipt}
+                                    checked={props.values.tax_receipt}
                                     onChange={on_change_event("tax_receipt")}
                                 />
                             }
@@ -275,7 +268,7 @@ function Step2(props) {
                                     autoComplete="forname"
                                     required
                                     variant="standard"
-                                    value={default_values.forname}
+                                    value={props.values.forname}
                                     onChange={on_change_event("forname")}
                                 />
                             </Grid>
@@ -287,7 +280,7 @@ function Step2(props) {
                                     autoComplete="name"
                                     required
                                     variant="standard"
-                                    value={default_values.name}
+                                    value={props.values.name}
                                     onChange={on_change_event("name")}
                                 />
                             </Grid>
@@ -300,7 +293,7 @@ function Step2(props) {
                             autoComplete="organisation_name"
                             required
                             variant="standard"
-                            value={default_values.organisation_name}
+                            value={props.values.organisation_name}
                             onChange={on_change_event("organisation_name")}
                         />
 
@@ -313,7 +306,7 @@ function Step2(props) {
                             autoComplete="address"
                             required
                             variant="standard"
-                            value={default_values.address}
+                            value={props.values.address}
                             onChange={on_change_event("address")}
                         />
                     </Grid>
@@ -324,7 +317,7 @@ function Step2(props) {
                             label={Config.messages.complement}
                             autoComplete="complement"
                             variant="standard"
-                            value={default_values.complement}
+                            value={props.values.complement}
                             onChange={on_change_event("complement")}
                         />
                     </Grid>
@@ -337,7 +330,7 @@ function Step2(props) {
                                 autoComplete="zip_code"
                                 required
                                 variant="standard"
-                                value={default_values.zip_code}
+                                value={props.values.zip_code}
                                 onChange={on_change_event("zip_code")}
                             />
                         </Grid>
@@ -349,7 +342,7 @@ function Step2(props) {
                                 autoComplete="city"
                                 required
                                 variant="standard"
-                                value={default_values.city}
+                                value={props.values.city}
                                 onChange={on_change_event("city")}
                             />
                         </Grid>
@@ -360,7 +353,7 @@ function Step2(props) {
                             <SelectCountry
                                 labelId="country-label"
                                 id="country"
-                                default_country={default_values.country}
+                                default_country={props.values.country}
                                 on_change={on_change("country")}
                             />
                         </FormControl>
@@ -387,7 +380,7 @@ function Step3(props) {
 
             <Box mt={2} ml={2}>
                 <SelectPaymentMethod
-                    default_method={Config.payment_methods[0].id}
+                    default_method={props.values.payment_method}
                     methods={Config.payment_methods}
                     on_change={on_change("payment_method")}
                 />
@@ -401,12 +394,37 @@ function Step3(props) {
 function CheckoutForm() {
     const [on_accessibility_mode, set_on_accessibility_mode] = React.useState(false);
 
+    // Fixme: design
+    //   We must store field values in a state
+    //   we must pass default values, else we would have to get it from the DOM ...
+    const [values, set_values] = React.useState({
+        // Step1
+        donation_occurrence: "once",
+        amount: Config.default_amounts[0],
+
+        // Step2
+        email: "john.doe@example.com",
+        forname: "John",
+        name: "Doe",
+        organisation_name: "",
+        tax_receipt: true,
+        address: "",
+        complement: "",
+        zip_code: "",
+        city: "",
+        country: "France",
+
+        // Step3
+        payment_method: Config.payment_methods[0].id,
+    });
+
     const toggle_accessibility_mode = (event) => {
         set_on_accessibility_mode(event.target.checked);
     };
 
     const on_change = (prop, value) => {
         console.log(`on_change ${prop} ${value}`);
+        set_values({...values, [prop]: value});
     };
 
     // reduced_amount: "", // compute_reduced_amount(default_amount),
@@ -483,10 +501,10 @@ function CheckoutForm() {
                 label={Config.messages.accessibility_checkbox_title}
             />
 
-            <Step1 on_change={on_change} />
-            <Step2 on_change={on_change} />
+            <Step1 values={values} on_change={on_change} />
+            <Step2 values={values} on_change={on_change} />
             {/* <p>Reduced amout : {values.reduced_amount} €</p> */}
-            <Step3 on_change={on_change} />
+            <Step3 values={values} on_change={on_change} />
 
             <Box mt={4}>
                 <Grid container justify="center">
