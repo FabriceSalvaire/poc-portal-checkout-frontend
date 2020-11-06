@@ -20,9 +20,11 @@
  *
  **************************************************************************************************/
 
+// Implement an amount selector
+
 /**************************************************************************************************/
 
-import React, { useState } from "react";
+import React from "react";
 
 import ToggleButton from '@material-ui/core/ToggleButton';
 import ToggleButtonGroup from '@material-ui/core/ToggleButtonGroup';
@@ -30,7 +32,8 @@ import ToggleButtonGroup from '@material-ui/core/ToggleButtonGroup';
 /**************************************************************************************************/
 
 export default function SelectCurrencyAmount(props) {
-    const handle_change = (event, new_value) => {
+    // Callback to forward
+    const on_change = (event, new_value) => {
         props.on_change(new_value);
     };
 
@@ -38,7 +41,7 @@ export default function SelectCurrencyAmount(props) {
         <ToggleButtonGroup
             value={props.amount}
             exclusive
-            onChange={handle_change}
+            onChange={on_change}
             aria-label={props.label}
         >
             { props.amounts.map((amount, index) => (

@@ -20,6 +20,8 @@
  *
  **************************************************************************************************/
 
+// Implement an input to enter a currency amount
+
 /**************************************************************************************************/
 
 import React, { useState } from "react";
@@ -30,6 +32,7 @@ import TextField from '@material-ui/core/TextField';
 /**************************************************************************************************/
 
 export default function InputCurrencyAmount(props) {
+    // check amount match the regexp
     const check_amount = (amount) => {
         if (!props.required && (amount === "" || amount == null))
             return true;
@@ -38,30 +41,15 @@ export default function InputCurrencyAmount(props) {
 
     const [is_invalid_amount, set_is_invalid_amount] = useState(!check_amount(props.amount));
 
-    const handle_change = (event) => {
+    // Callback to forward
+    const on_change = (event) => {
         let value = event.target.value;
         let is_float = check_amount(value);
-        // let amount = Number.parseFloat(value);
         set_is_invalid_amount(!is_float);
         if (is_float)
+            // Number.parseFloat(value);
             props.on_change(value);
     };
-
-    // <FormControl className={clsx(classes.margin, classes.withoutLabel, classes.textField)}>
-    //     <Input
-    //         id="amount"
-    //         endAdornment={<InputAdornment position="end">€</InputAdornment>}
-    //         aria-describedby="standard-amount-helper-text"
-    //         inputProps={{
-    //             'aria-label': 'amount',
-    //         }}
-    //         required
-    //         value={values.amount}
-    //         onChange={handle_change('amount')}
-    //         error={is_invalid_amount}
-    //     />
-    //     <FormHelperText id="standard-amount-helper-text">Amount</FormHelperText>
-    // </FormControl>
 
     return (
         <TextField
@@ -77,7 +65,7 @@ export default function InputCurrencyAmount(props) {
             }
             value={props.amount}
             required={props.required}
-            onChange={handle_change}
+            onChange={on_change}
             error={is_invalid_amount}
             helperText={is_invalid_amount ? props.error_text :  props.helper_text}
         />
@@ -97,3 +85,23 @@ InputCurrencyAmount.defaultProps = {
     required: false,
     amount: "",
 }
+
+/**************************************************************************************************/
+
+// <FormControl className={clsx(classes.margin, classes.withoutLabel, classes.textField)}>
+//     <Input
+//         id="amount"
+//         endAdornment={<InputAdornment position="end">€</InputAdornment>}
+//         aria-describedby="standard-amount-helper-text"
+//         inputProps={{
+//             'aria-label': 'amount',
+//         }}
+//         required
+//         value={values.amount}
+//         onChange={on_change('amount')}
+//         error={is_invalid_amount}
+//     />
+//     <FormHelperText id="standard-amount-helper-text">Amount</FormHelperText>
+// </FormControl>
+
+/**************************************************************************************************/

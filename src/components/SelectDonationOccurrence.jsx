@@ -20,6 +20,8 @@
  *
  **************************************************************************************************/
 
+// Implement a donation occurrence selector
+
 /**************************************************************************************************/
 
 import React, { useState } from "react";
@@ -36,20 +38,22 @@ import * as Config from "../Config";
 /**************************************************************************************************/
 
 export default function SelectDonationOccurrence(props) {
-    const [type, set_type] = useState(props.init_choice);
+    // state to enforce that at least one button must be active
+    const [value, set_value] = useState(props.default_donation_occurrence);
 
-    const handle_change = (event, new_value) => {
+    // Callback to forward
+    const on_change = (event, new_value) => {
         if (new_value !== null) {
-            set_type(new_value);
+            set_value(new_value);
             props.on_change(new_value);
         }
     };
 
     return (
         <ToggleButtonGroup
-            value={type}
+            value={value}
             exclusive
-            onChange={handle_change}
+            onChange={on_change}
             /* aria-label="" */
         >
             <ToggleButton value="once" /* aria-label="" */ >
@@ -63,4 +67,5 @@ export default function SelectDonationOccurrence(props) {
 }
 
 SelectDonationOccurrence.defaultProps = {
+    default_donation_occurrence: "once",
 }

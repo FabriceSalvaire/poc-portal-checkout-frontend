@@ -20,6 +20,8 @@
  *
  **************************************************************************************************/
 
+// Implement a donator type
+
 /**************************************************************************************************/
 
 import React, { useState } from "react";
@@ -37,19 +39,20 @@ import * as Config from "../Config";
 /**************************************************************************************************/
 
 export default function SelectDonatorType(props) {
-    const [type, set_type] = useState("individual");
+    // state to enforce that at least one button must be active
+    const [value, set_value] = useState("individual");
 
+    // Callback to forward
     const handle_change = (event, new_value) => {
-        console.log(`SelectDonatorType.handle_change ${new_value}`);
         if (new_value !== null) {
-            set_type(new_value);
+            set_value(new_value);
             props.on_change(new_value);
         }
     };
 
     return (
         <ToggleButtonGroup
-            value={type}
+            value={value}
             exclusive
             onChange={handle_change}
             aria-label=""

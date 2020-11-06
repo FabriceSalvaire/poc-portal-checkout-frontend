@@ -20,6 +20,8 @@
  *
  **************************************************************************************************/
 
+// Implement a country selector
+
 /**************************************************************************************************/
 
 import React, { useState } from "react";
@@ -34,11 +36,12 @@ import * as CountryList from "../CountryList";
 /**************************************************************************************************/
 
 export default function SelectCountry(props) {
-    const country_number = CountryList.name_to_data[props.default_country].number;
+    // Fixme: really usefull ???
+    const default_country_number = CountryList.name_to_data[props.default_country].number;
+    const [country, set_country] = useState(default_country_number);
 
-    const [country, set_country] = useState(country_number);
-
-    const handle_change = (event) => {
+    // Callback to forward
+    const on_change = (event) => {
         let new_country_number = event.target.value;
         set_country(new_country_number);
         props.on_change(CountryList.number_to_data[new_country_number].name);
@@ -49,7 +52,7 @@ export default function SelectCountry(props) {
             labelId={props.labelId}
             id={props.id}
             value={country}
-            onChange={handle_change}
+            onChange={on_change}
         >
             { props.country_list.map((country, index) => (
                 <MenuItem key={props.key_prefix + index} value={country.number}>{country.name}</MenuItem>

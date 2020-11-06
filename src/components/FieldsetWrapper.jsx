@@ -20,6 +20,8 @@
  *
  **************************************************************************************************/
 
+// Implement a wrapper to wrap childrens in a <fieldset />
+
 /**************************************************************************************************/
 
 import React from "react";
@@ -27,7 +29,7 @@ import React from "react";
 /**************************************************************************************************/
 
 export default function FieldsetWrapper(props) {
-    if (props.on_sr)
+    if (props.on_screen_reader)
         return (
             <fieldset>
                 <legend>{props.legend}</legend>
@@ -43,6 +45,6 @@ export default function FieldsetWrapper(props) {
 }
 
 FieldsetWrapper.defaultProps = {
-    on_sr: false,
+    on_screen_reader: false,
     legend: "",
 }
