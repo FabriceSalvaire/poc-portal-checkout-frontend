@@ -41,7 +41,6 @@ import * as Config from "../Config";
 export default function SelectDonatorType(props) {
     // state to enforce that at least one button must be active
     // Fixme: but we should do value={props.donator_type} !!!
-    //   How to get default defined here from App.jsx ???
     const [value, set_value] = useState(props.default_donator_type);
 
     // Callback to forward

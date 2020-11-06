@@ -396,12 +396,14 @@ function CheckoutForm() {
     //   we must pass default values, else we would have to get it from the DOM ...
     const [values, set_values] = React.useState({
         // Step1
-        donation_occurrence: "once",
+        // donation_occurrence: "once",
+        donation_occurrence: SelectDonationOccurrence.defaultProps.default_donation_occurrence,
         amount: Config.default_amounts[0],
 
         // Step2
         email: "john.doe@example.com",
-        donator_type: "individual",
+        donator_type: SelectDonatorType.defaultProps.default_donator_type,
+        // donator_type: "individual",
         forname: "John",
         name: "Doe",
         organisation_name: "",
