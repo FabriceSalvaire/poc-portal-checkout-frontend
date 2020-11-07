@@ -20,9 +20,17 @@ export const recaptcha_site_key = '6LeTlt0ZAAAAAEH8r-8lYhgdzfoKMxkWVA8BMklX';
 const reduced_rate_individual = 66;
 const reduced_rate_organisation = 60;
 
-export function get_reduced_amount(amount, reduced_rate) {
+function compute_reduced_amount(amount, reduced_rate) {
     let p = 1 - reduced_rate / 100;
     return Math.trunc((amount * p)*100)/100;   // .toPrecision(2) -> scientific notation ???
+}
+
+export function reduced_rate_for_donator(donator_type) {
+    return donator_type === "individual" ? reduced_rate_individual : reduced_rate_organisation;
+}
+
+export function reduced_amount_for_donator(amount, donator_type) {
+    return compute_reduced_amount(amount, reduced_rate_for_donator(donator_type));
 }
 
 /**************************************************************************************************/
@@ -95,6 +103,18 @@ export const messages = {
     // Paypal
     bank_transfer: "Virement",
     check: "Chèque",
+
+    defiscalisation_text: ({donator_type, amount}) => {
+        console.log("defiscalisation_text", donator_type, amount);
+        let rate = reduced_rate_for_donator(donator_type);
+        let reduced_amount = compute_reduced_amount(amount, rate);
+        return (
+            <p>
+                En France, grâce à la déduction d’impôts de {rate} %,
+                votre don de <strong>{amount} €</strong> vous coûtera <strong>{reduced_amount} €</strong>.
+            </p>
+        );
+    },
 
     submit_title: amount => `Je donne ${amount} € maintenant`,
 

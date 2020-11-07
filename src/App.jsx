@@ -210,6 +210,12 @@ function Step2(props) {
         set_value(prop, value);
     };
 
+    const on_toggle_event = (prop) => (event) => {
+        let value = event.target.checked;
+        // console.log(`on_change ${prop} ${event} ${value}`);
+        set_value(prop, value);
+    };
+
     return (
         <React.Fragment>
             <Typography component="h1" variant="h5">
@@ -249,7 +255,7 @@ function Step2(props) {
                                     name="tax_receipt"
                                     color="primary"
                                     checked={props.values.tax_receipt}
-                                    onChange={on_change_event("tax_receipt")}
+                                    onChange={on_toggle_event("tax_receipt")}
                                 />
                             }
                             label={Config.messages.i_would_like_to_receive_a_tax_receipt}
@@ -427,14 +433,6 @@ function CheckoutForm() {
         set_values({...values, [prop]: value});
     };
 
-    // reduced_amount: "", // compute_reduced_amount(default_amount),
-    // var other_values = {};
-    // switch (prop) {
-    // case "amount":
-    //     // compute_reduced_amount(amount)
-    //     break;
-    // }
-
     // handle_verify(token) {
     //     console.log("recaptcha token:", token);
     // };
@@ -503,7 +501,7 @@ function CheckoutForm() {
 
             <Step1 values={values} on_change={on_change} />
             <Step2 values={values} on_change={on_change} />
-            {/* <p>Reduced amout : {values.reduced_amount} €</p> */}
+            <Config.messages.defiscalisation_text donator_type={values.donator_type} amount={values.amount} />
             <Step3 values={values} on_change={on_change} />
 
             <Box mt={4}>
@@ -513,7 +511,7 @@ function CheckoutForm() {
                         variant="contained"
                         color="primary"
                     >
-                        {Config.messages.submit_title("amout")}
+                        {Config.messages.submit_title(values.amount)}
                     </Button>
                 </Grid>
             </Box>
