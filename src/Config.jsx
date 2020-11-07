@@ -68,9 +68,9 @@ export const messages = {
     donation_occurence_fieldset_legend: "Choississez entre un don unique ou mensuel",
     once: "UNE FOIS",
     monthly: "TOUS LES MOIS",
-    amount_fieldset_legend: "Choississez un montant",
-    input_amount_label: "Montant",
-    input_amount_helper_text: "Ou saisissez un montant libre, e.g. 123 ou 123,45",
+    amount_fieldset_legend: "Choississez un montant prédéfini",
+    input_amount_label: "Montant libre",
+    input_amount_helper_text: "Ou saisissez un montant libre, e.g. 123 ou 123,45 en Euro",
     invalid_amount: "montant invalide",
 
     title2: "2. Je complète mes informations",

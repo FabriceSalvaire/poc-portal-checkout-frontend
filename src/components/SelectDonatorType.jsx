@@ -56,16 +56,16 @@ export default function SelectDonatorType(props) {
             value={value}
             exclusive
             onChange={handle_change}
-            aria-label=""
+            aria-label={props.messages.i_represent}
         >
-            <ToggleButton value="individual" aria-label="">
-                <span><FontAwesomeIcon icon="address-card" /> {Config.messages.an_individual}</span>
+            <ToggleButton value="individual">
+                <span><FontAwesomeIcon icon="address-card" /> {props.messages.an_individual}</span>
             </ToggleButton>
-                <ToggleButton value="organisation" aria-label="">
-            <Tooltip title={Config.messages.organisation_tip}>
-                    <span><FontAwesomeIcon icon="university" /> {Config.messages.an_organisation}</span>
-            </Tooltip>
-                </ToggleButton>
+            <ToggleButton value="organisation">
+                <Tooltip title={props.messages.organisation_tip}>
+                    <span><FontAwesomeIcon icon="university" /> {props.messages.an_organisation}</span>
+                </Tooltip>
+            </ToggleButton>
         </ToggleButtonGroup>
     );
 }

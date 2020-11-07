@@ -55,18 +55,19 @@ export default function InputCurrencyAmount(props) {
         <TextField
             id={props.id}
             name={props.name}
-            label={props.label}
+            label={props.label}    // Aria: duplication ???
             variant={props.variant}
             InputProps={
                 props.currency_position === "start" ?
-                    { startAdornment: <InputAdornment position="start">{props.currency}</InputAdornment> }
+                    { startAdornment: <InputAdornment position="start" aria-hidden="true">{props.currency}</InputAdornment> }
                 :
-                    { endAdornment: <InputAdornment position="end">{props.currency}</InputAdornment> }
+                    { endAdornment: <InputAdornment position="end" aria-hidden="true">{props.currency}</InputAdornment> }
             }
             value={props.amount}
             required={props.required}
             onChange={on_change}
             error={is_invalid_amount}
+            // Aria: position ???
             helperText={is_invalid_amount ? props.error_text :  props.helper_text}
         />
     );

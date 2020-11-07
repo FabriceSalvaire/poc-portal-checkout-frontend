@@ -48,7 +48,7 @@ export default function SelectPaymentMethod(props) {
             value={value}
             exclusive
             onChange={handle_change}
-            /* aria-label={props.group_aria_label} */
+            aria-label={props.messages.payment_method_fieldset_legend}
         >
             { props.methods.map((method, index) => (
                 <ToggleButton key={props.key_prefix + index} value={method.id} /* aria-label="" */ >

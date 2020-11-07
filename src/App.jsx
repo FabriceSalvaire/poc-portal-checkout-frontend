@@ -21,6 +21,16 @@
  *
  **************************************************************************************************/
 
+/***************************************************************************************************
+ *
+ * WAI-ARIA was checked with
+ *   - Google Lighthouse
+ *   - https://github.com/ziolko/aria-devtools on Chrome
+ *   - https://wave.webaim.org on Chrome (found issues on country selector ???)
+ *   => But it must be commissioned by relevant users of accessibility technologies !
+ *
+ **************************************************************************************************/
+
 /**************************************************************************************************/
 
 import React, { useState, useEffect } from "react";
@@ -172,6 +182,7 @@ function Step1(props) {
                     <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
                         <Grid item>
                             <SelectDonationOccurrence
+                                messages={Config.messages}
                                 default_donation_occurrence={props.values.donation_occurrence}
                                 on_change={on_change("donation_occurrence")}
                             />
@@ -226,15 +237,26 @@ function Step2(props) {
                 <Grid container direction="column" spacing={2}>
                     <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
                         <Grid item>
-                            <Typography component="h2" variant="h6">
+                            <Typography component="h2" variant="h6" aria-hidden="true">
                                 {Config.messages.i_represent}
                             </Typography>
                         </Grid>
                         <SelectDonatorType
+                            messages={Config.messages}
                             default_donator_type={props.values.default_donator_type}
                             on_change={on_change("donator_type")}
                         />
                     </Grid>
+                    {/* <Grid item> */}
+                    {/*     <fieldset> */}
+                    {/*         <legend>{Config.messages.i_represent}</legend> */}
+                    {/*         <SelectDonatorType */}
+                    {/*             messages={Config.messages} */}
+                    {/*             default_donator_type={props.values.default_donator_type} */}
+                    {/*             on_change={on_change("donator_type")} */}
+                    {/*         /> */}
+                    {/*     </fieldset> */}
+                    {/* </Grid> */}
                     <Grid item>
                         <TextField
                             id="email"
@@ -383,6 +405,7 @@ function Step3(props) {
 
             <Box mt={2} ml={2}>
                 <SelectPaymentMethod
+                    messages={Config.messages}
                     default_method={props.values.payment_method}
                     methods={Config.payment_methods}
                     on_change={on_change("payment_method")}
@@ -395,8 +418,6 @@ function Step3(props) {
 /**************************************************************************************************/
 
 function CheckoutForm() {
-    const [on_accessibility_mode, set_on_accessibility_mode] = React.useState(false);
-
     // Fixme: state design
     //   We must store field values in a state
     //   we must pass default values, else we would have to get it from the DOM ...
@@ -423,10 +444,6 @@ function CheckoutForm() {
         // Step3
         payment_method: Config.payment_methods[0].id,
     });
-
-    const toggle_accessibility_mode = (event) => {
-        set_on_accessibility_mode(event.target.checked);
-    };
 
     const on_change = (prop, value) => {
         console.log(`on_change ${prop} ${value}`);
@@ -487,18 +504,6 @@ function CheckoutForm() {
         /* novalidate */
             label="Form"
         > {/* onSubmit={this.handle_submit} */}
-            <FormControlLabel
-                control={
-                    <Switch
-                        name="accessibility-mode-checkbox"
-                        color="primary"
-                        checked={on_accessibility_mode}
-                        onChange={toggle_accessibility_mode}
-                    />
-                }
-                label={Config.messages.accessibility_checkbox_title}
-            />
-
             <Step1 values={values} on_change={on_change} />
             <Step2 values={values} on_change={on_change} />
             <Config.messages.defiscalisation_text donator_type={values.donator_type} amount={values.amount} />
@@ -530,6 +535,7 @@ const Message = ({ message }) => (
 /**************************************************************************************************/
 
 export default function App() {
+    const [on_accessibility_mode, set_on_accessibility_mode] = React.useState(false);
     const [message, set_message] = useState("");
 
     useEffect(() => {
@@ -544,6 +550,10 @@ export default function App() {
             set_message("Order canceled -- continue to shop around and checkout when you're ready.");
         }
     }, [message]);
+
+    const toggle_accessibility_mode = (event) => {
+        set_on_accessibility_mode(event.target.checked);
+    };
 
     // <GoogleReCaptchaProvider
     //     reCaptchaKey="[Your recaptcha key]"
@@ -565,13 +575,25 @@ export default function App() {
         <Message message={message} />
     ) : (
         <ThemeProvider theme={theme}>
-            <GoogleReCaptchaProvider
+             <GoogleReCaptchaProvider
                 reCaptchaKey={Config.recaptcha_site_key}
             >
                 <CssBaseline />
                 <Container component="main" maxWidth="lg">
                     <Paper elevation={3}>
                         <Box p={3}>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        name="accessibility-mode-checkbox"
+                                        color="primary"
+                                        checked={on_accessibility_mode}
+                                        onChange={toggle_accessibility_mode}
+                                    />
+                                }
+                                label={Config.messages.accessibility_checkbox_title}
+                            />
+
                             <CheckoutForm />
                         </Box>
                     </Paper>

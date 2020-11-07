@@ -54,13 +54,13 @@ export default function SelectDonationOccurrence(props) {
             value={value}
             exclusive
             onChange={on_change}
-            /* aria-label="" */
+            aria-label={props.messages.donation_occurence_fieldset_legend}
         >
             <ToggleButton value="once" /* aria-label="" */ >
-                <span><FontAwesomeIcon icon="hand-holding-heart" /> {Config.messages.once}</span>
+                <span><FontAwesomeIcon icon="hand-holding-heart" /> {props.messages.once}</span>
             </ToggleButton>
             <ToggleButton value="monthly" /* aria-label="" */ >
-                <span><FontAwesomeIcon icon="hand-holding-medical" /> {Config.messages.monthly}</span>
+                <span><FontAwesomeIcon icon="hand-holding-medical" /> {props.messages.monthly}</span>
             </ToggleButton>
         </ToggleButtonGroup>
     );
