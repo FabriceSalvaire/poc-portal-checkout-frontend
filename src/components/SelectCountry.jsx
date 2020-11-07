@@ -52,6 +52,7 @@ export default function SelectCountry(props) {
         <Select
             labelId={props.labelId}
             id={props.id}
+            autoWidth
             value={country}
             onChange={on_change}
         >

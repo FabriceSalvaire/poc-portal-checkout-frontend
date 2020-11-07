@@ -233,7 +233,7 @@ function Step2(props) {
                 {Config.messages.title2}
             </Typography>
 
-            <Box mt={3} mb={2} ml={2}>
+            <Box mt={3} mb={2} ml={2} width="50em">
                 <Grid container direction="column" spacing={2}>
                     <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
                         <Grid item>
@@ -265,6 +265,7 @@ function Step2(props) {
                             autoComplete="email"
                             required
                             variant="standard"
+                            fullWidth
                             type="email"
                             value={props.values.email}
                             onChange={on_change_event("email")}
@@ -285,7 +286,7 @@ function Step2(props) {
                     </Grid>
                     { props.values.donator_type === "individual" ? (
                         <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
-                            <Grid item>
+                            <Grid item xs={6}>
                                 <TextField
                                     id="forname"
                                     name="forname"
@@ -293,11 +294,12 @@ function Step2(props) {
                                     autoComplete="forname"
                                     required
                                     variant="standard"
+                                    fullWidth
                                     value={props.values.forname}
                                     onChange={on_change_event("forname")}
                                 />
                             </Grid>
-                            <Grid item>
+                            <Grid item xs={6}>
                                 <TextField
                                     id="name"
                                     name="name"
@@ -305,23 +307,26 @@ function Step2(props) {
                                     autoComplete="name"
                                     required
                                     variant="standard"
+                                    fullWidth
                                     value={props.values.name}
                                     onChange={on_change_event("name")}
                                 />
                             </Grid>
                         </Grid>
                     ) : (
-                        <TextField
-                            id="organisation_name"
-                            name="organisation_name"
-                            label={Config.messages.organisation_name}
-                            autoComplete="organisation_name"
-                            required
-                            variant="standard"
-                            value={props.values.organisation_name}
-                            onChange={on_change_event("organisation_name")}
-                        />
-
+                        <Grid item>
+                            <TextField
+                                id="organisation_name"
+                                name="organisation_name"
+                                label={Config.messages.organisation_name}
+                                autoComplete="organisation_name"
+                                required
+                                variant="standard"
+                                fullWidth
+                                value={props.values.organisation_name}
+                                onChange={on_change_event("organisation_name")}
+                            />
+                        </Grid>
                     ) }
                     <Grid item>
                         <TextField
@@ -331,6 +336,7 @@ function Step2(props) {
                             autoComplete="address"
                             required
                             variant="standard"
+                            fullWidth
                             value={props.values.address}
                             onChange={on_change_event("address")}
                         />
@@ -342,12 +348,13 @@ function Step2(props) {
                             label={Config.messages.complement}
                             autoComplete="complement"
                             variant="standard"
+                            fullWidth
                             value={props.values.complement}
                             onChange={on_change_event("complement")}
                         />
                     </Grid>
                     <Grid className={classes.grid_padding_fix} container direction="row" spacing={2}>
-                        <Grid item>
+                        <Grid item xs={6}>
                             <TextField
                                 id="zip_code"
                                 name="zip_code"
@@ -355,11 +362,12 @@ function Step2(props) {
                                 autoComplete="zip_code"
                                 required
                                 variant="standard"
+                                fullWidth
                                 value={props.values.zip_code}
                                 onChange={on_change_event("zip_code")}
                             />
                         </Grid>
-                        <Grid item>
+                        <Grid item xs={6}>
                             <TextField
                                 id="city"
                                 name="city"
@@ -367,12 +375,13 @@ function Step2(props) {
                                 autoComplete="city"
                                 required
                                 variant="standard"
+                                fullWidth
                                 value={props.values.city}
                                 onChange={on_change_event("city")}
                             />
                         </Grid>
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={12}>
                         <FormControl>
                             <InputLabel id="contry-label">{Config.messages.country}</InputLabel>
                             <SelectCountry
@@ -515,6 +524,7 @@ function CheckoutForm() {
                         type="submit"
                         variant="contained"
                         color="primary"
+                        size="xlarge"
                     >
                         {Config.messages.submit_title(values.amount)}
                     </Button>
