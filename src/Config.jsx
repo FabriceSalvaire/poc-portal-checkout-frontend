@@ -57,6 +57,21 @@ export function get_net_stripe_amount(amount) {
     return (amount - stripe_fee_base) / (1 + stripe_fee_percent);
 }
 
+export function amount_to_str(amount) {
+    if (!Number.isNaN(amount))
+        return amount.toLocaleString(
+            'fr-FR',
+            {
+                style: 'currency',
+                currency: 'EUR',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+            }
+        );
+    else
+        return "…";
+}
+
 /**************************************************************************************************/
 
 export const organisation_name = "Organisation";
@@ -107,16 +122,22 @@ export const messages = {
     defiscalisation_text: ({donator_type, amount}) => {
         console.log("defiscalisation_text", donator_type, amount);
         let rate = reduced_rate_for_donator(donator_type);
-        let reduced_amount = compute_reduced_amount(amount, rate);
-        return (
-            <p>
-                En France, grâce à la déduction d’impôts de {rate} %,
-                votre don de <strong>{amount} €</strong> vous coûtera <strong>{reduced_amount} €</strong>.
-            </p>
-        );
+        let _amount = Number.parseFloat(amount);   // Fixme: use xis_amount_valid ???
+        if (!Number.isNaN(_amount)) {
+            let reduced_amount = compute_reduced_amount(_amount, rate);
+            let amount_str = amount_to_str(_amount);
+            let reduced_amount_str = amount_to_str(reduced_amount);
+            return (
+                <p>
+                    En France, grâce à la déduction d’impôts de {rate} %,
+                    votre don de <strong>{amount_str}</strong> vous coûtera <strong>{reduced_amount_str}</strong>.
+                </p>
+            );
+        } else
+            return (<p></p>);
     },
 
-    submit_title: amount => `Je donne ${amount} € maintenant`,
+    submit_title: (amount) => <span>Je donne {amount_to_str(amount)} maintenant</span>,
 
     // Les reçus fiscaux (en France uniquement) sont envoyés par courriel en mars/avril 2021 (avant la déclaration d’impôt) pour les dons versés en 2020
     // Les rapports d’activité et financier de l’association peuvent être consultés depuis notre page de présentation de l’association

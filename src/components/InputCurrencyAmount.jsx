@@ -44,11 +44,10 @@ export default function InputCurrencyAmount(props) {
     // Callback to forward
     const on_change = (event) => {
         let value = event.target.value;
-        let is_float = check_amount(value);
-        set_is_invalid_amount(!is_float);
-        if (is_float)
-            // Number.parseFloat(value);
-            props.on_change(value);
+        let is_valid = check_amount(value);
+        set_is_invalid_amount(!is_valid);
+        // With this design we must update the value, valid or not
+        props.on_change(value, is_valid);
     };
 
     return (

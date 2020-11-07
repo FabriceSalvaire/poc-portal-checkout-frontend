@@ -110,8 +110,8 @@ function AmountField(props) {
     const [custom_amount, set_custom_amount] = React.useState("");
 
     // Forward change
-    const emit_amount_change = (amount) => {
-        props.on_change(amount);
+    const emit_amount_change = (amount, is_valid) => {
+        props.on_change(amount, is_valid);
     };
 
     // Callback
@@ -119,15 +119,15 @@ function AmountField(props) {
         console.log(`on_preset_amount_change ${amount}`);
         set_preset_amount(amount);
         set_custom_amount("");
-        emit_amount_change(amount);
+        emit_amount_change(amount, true);
     };
 
     // Callback
-    const on_custom_amount_change = (amount) => {
+    const on_custom_amount_change = (amount, is_valid) => {
         console.log(`on_custom_amount_change ${amount}`);
         set_preset_amount(null);
         set_custom_amount(amount);
-        emit_amount_change(amount);
+        emit_amount_change(amount, is_valid);
     };
 
     return (
@@ -167,6 +167,10 @@ function Step1(props) {
         props.on_change(prop, value);
     };
 
+    const on_amount_change = (amount, is_valid) => {
+        props.on_amount_change(amount, is_valid);
+    };
+
     return (
         <React.Fragment>
             <Typography component="h1" variant="h5">
@@ -190,7 +194,7 @@ function Step1(props) {
                     </Grid>
                     <AmountField
                         default_preset_amount={props.values.amount}
-                        on_change={on_change("amount")}
+                        on_change={on_amount_change}
                     />
                 </Grid>
             </Box>
@@ -435,6 +439,7 @@ function CheckoutForm() {
         // donation_occurrence: "once",
         donation_occurrence: SelectDonationOccurrence.defaultProps.default_donation_occurrence,
         amount: Config.default_amounts[0],
+        is_amount_valid: true,
 
         // Step2
         email: "john.doe@example.com",
@@ -457,6 +462,11 @@ function CheckoutForm() {
     const on_change = (prop, value) => {
         console.log(`on_change ${prop} ${value}`);
         set_values({...values, [prop]: value});
+    };
+
+    const on_amount_change = (value, is_valid) => {
+        console.log(`on_amount_change ${value} ${is_valid}`);
+        set_values({...values, amount: value, is_amount_valid: is_valid});
     };
 
     // handle_verify(token) {
@@ -513,7 +523,7 @@ function CheckoutForm() {
         /* novalidate */
             label="Form"
         > {/* onSubmit={this.handle_submit} */}
-            <Step1 values={values} on_change={on_change} />
+            <Step1 values={values} on_change={on_change} on_amount_change={on_amount_change} />
             <Step2 values={values} on_change={on_change} />
             <Config.messages.defiscalisation_text donator_type={values.donator_type} amount={values.amount} />
             <Step3 values={values} on_change={on_change} />
@@ -525,6 +535,7 @@ function CheckoutForm() {
                         variant="contained"
                         color="primary"
                         size="xlarge"
+                        disabled={!values.is_amount_valid}
                     >
                         {Config.messages.submit_title(values.amount)}
                     </Button>
