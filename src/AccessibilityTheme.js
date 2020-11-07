@@ -33,16 +33,18 @@ const default_theme = createMuiTheme();
 
 /**************************************************************************************************/
 
-const theme_palette = {
+const accessibility_theme_palette = {
     // The colors used to style the text.
-    // text: {
-    //     // The most important text.
-    //     primary: 'rgba(0, 0, 0, 0.87)',
-    //     // Secondary text.
-    //     secondary: 'rgba(0, 0, 0, 0.54)',
-    //     // Disabled text have even lower visual prominence.
-    //     disabled: 'rgba(0, 0, 0, 0.38)',
-    // },
+    text: {
+        // The most important text.
+        // primary: 'rgba(0, 0, 0, 0.87)',
+        primary: 'rgba(0, 0, 0, 1.00)',
+        // Secondary text.
+        // secondary: 'rgba(0, 0, 0, 0.54)',
+        secondary: 'rgba(0, 0, 0, 0.75)',
+        // Disabled text have even lower visual prominence.
+        disabled: 'rgba(0, 0, 0, 0.38)',
+    },
     // // The color used to divide different elements.
     // divider: 'rgba(0, 0, 0, 0.12)',
     // // The background colors used to style the surfaces.
@@ -56,7 +58,7 @@ const theme_palette = {
         // The color of an active action like an icon button.
         // ==> Accessibility contrast issue 4.28 !
         // active: 'rgba(0, 0, 0, 0.54)',
-        active: 'rgba(0, 0, 0, 0.70)',
+        active: 'rgba(0, 0, 0, 0.95)',
         // // The color of an hovered action.
         // hover: 'rgba(0, 0, 0, 0.04)',
         // hoverOpacity: 0.04,
@@ -76,10 +78,33 @@ const theme_palette = {
 
 /**************************************************************************************************/
 
+const accessibility_theme_typography = {
+    // The default font size of the Material Specification.
+    fontSize: 14, // px
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+    fontWeightBold: 700,
+    // Tell Material-UI what's the font-size on the html element.
+    // 16px is the default font-size used by browsers.
+    htmlFontSize: 16,
+    button: {
+        fontWeight: 500,
+        fontWeight: 700,
+        fontSize: "0.875rem",
+        lineHeight: 1.75,
+        letterSpacing: "0.02857em",
+        textTransform: "uppercase",
+    },
+};
+
+/**************************************************************************************************/
+
 // Note: It overrides the theme globaly !!! ???
 //       Thus it must be applied at top level ...
-export const theme = createMuiTheme({
-    palette: theme_palette,
+export const accessibility_theme = createMuiTheme({
+    palette: accessibility_theme_palette,
+    typography: accessibility_theme_typography,
 
     components: {
         // from material-ui/packages/material-ui/src/ToggleButtonGroup/ToggleButtonGroup.js
@@ -149,7 +174,7 @@ export const theme = createMuiTheme({
                     // border: `1px solid ${alpha(theme_palette.action.active, 0.12)}`,
                     // ==> Accessibility contrast issue !
                     // color: alpha(default_theme.palette.action.active, 0.38),
-                    color: alpha(theme_palette.action.active, 0.6),
+                    color: alpha(accessibility_theme_palette.action.active, 0.8),
                     // '&$selected': {
                     //     color: theme_palette.action.active,
                     //     backgroundColor: alpha(theme_palette.action.active, 0.12),

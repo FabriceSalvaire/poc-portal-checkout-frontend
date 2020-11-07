@@ -71,6 +71,7 @@ import { loadStripe } from "@stripe/stripe-js";
 
 import * as Config from "./Config";
 import { theme } from "./Theme";
+import { accessibility_theme } from "./AccessibilityTheme";
 
 // import FieldsetWrapper from "./components/FieldsetWrapper";
 import InputCurrencyAmount from "./components/InputCurrencyAmount";
@@ -534,7 +535,7 @@ function CheckoutForm() {
                         type="submit"
                         variant="contained"
                         color="primary"
-                        size="xlarge"
+                        size="large"
                         disabled={!values.is_amount_valid}
                     >
                         {Config.messages.submit_title(values.amount)}
@@ -595,7 +596,7 @@ export default function App() {
     return message ? (
         <Message message={message} />
     ) : (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={on_accessibility_mode ? accessibility_theme : theme}>
              <GoogleReCaptchaProvider
                 reCaptchaKey={Config.recaptcha_site_key}
             >
@@ -614,7 +615,6 @@ export default function App() {
                                 }
                                 label={Config.messages.accessibility_checkbox_title}
                             />
-
                             <CheckoutForm />
                         </Box>
                     </Paper>
