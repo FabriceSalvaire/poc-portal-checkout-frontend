@@ -1,6 +1,6 @@
-# Donation Checkout Frontend
+# React Donation Checkout Component
 
-This application implements a donation checkout frontend using the [React](https://reactjs.org)
+This repository implements a donation checkout component using the [React](https://reactjs.org)
 framework (16.8 hooks) and [Material-UI](https://material-ui.com) React components for [Material
 Design](https://material.io/design).
 
@@ -10,11 +10,13 @@ Design](https://material.io/design).
 * [React Router](https://reactrouter.com)
 * [Redux](https://redux.js.org)
 * transpiled and bundled by [Webpack](https://webpack.js.org)
-* Sass stylesheet
+* [JSS](https://cssinjs.org) stylesheet
 * Nginx HTTP proxy
 
 ## Features
 
+* plugable in a HTML page as a component
+* plugable in Wordpress as a shortcode block
 * implement [WAI-ARIA](https://www.w3.org/TR/wai-aria) for accessibility
 
 ### reCAPTCHA Protection
