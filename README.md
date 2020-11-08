@@ -4,6 +4,15 @@ This application implements a donation checkout frontend using the [React](https
 framework (16.8 hooks) and [Material-UI](https://material-ui.com) React components for [Material
 Design](https://material.io/design).
 
+## Stack
+
+* [React](https://reactjs.org) Web Framework
+* [React Router](https://reactrouter.com)
+* [Redux](https://redux.js.org)
+* transpiled and bundled by [Webpack](https://webpack.js.org)
+* Sass stylesheet
+* Nginx HTTP proxy
+
 ## Features
 
 * implement [WAI-ARIA](https://www.w3.org/TR/wai-aria) for accessibility
