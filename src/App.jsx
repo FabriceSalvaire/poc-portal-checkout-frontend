@@ -39,7 +39,6 @@ import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import Container from "@material-ui/core/Container";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Grid from "@material-ui/core/Grid";
@@ -48,6 +47,9 @@ import Paper from "@material-ui/core/Paper";
 import Switch from "@material-ui/core/Switch";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+
+import CssBaseline from "@material-ui/core/CssBaseline";
+import ScopedCssBaseline from '@material-ui/core/ScopedCssBaseline';
 
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 
@@ -599,27 +601,29 @@ export default function App() {
         <ThemeProvider theme={on_accessibility_mode ? accessibility_theme : theme}>
              <GoogleReCaptchaProvider
                 reCaptchaKey={Config.recaptcha_site_key}
-            >
-                <CssBaseline />
-                <Container component="main" maxWidth="lg">
-                    <Paper elevation={3}>
-                        <Box p={3}>
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        name="accessibility-mode-checkbox"
-                                        color="primary"
-                                        checked={on_accessibility_mode}
-                                        onChange={toggle_accessibility_mode}
-                                    />
-                                }
-                                label={Config.messages.accessibility_checkbox_title}
-                            />
-                            <CheckoutForm />
-                        </Box>
-                    </Paper>
-                </Container>
-            </GoogleReCaptchaProvider>
+             >
+                {/* <CssBaseline /> */}
+                 <ScopedCssBaseline>
+                     <Container component="main" maxWidth="lg">
+                         <Paper elevation={3}>
+                             <Box p={3}>
+                                 <FormControlLabel
+                                     control={
+                                         <Switch
+                                             name="accessibility-mode-checkbox"
+                                             color="primary"
+                                             checked={on_accessibility_mode}
+                                             onChange={toggle_accessibility_mode}
+                                         />
+                                     }
+                                     label={Config.messages.accessibility_checkbox_title}
+                                 />
+                                 <CheckoutForm />
+                             </Box>
+                         </Paper>
+                     </Container>
+                 </ScopedCssBaseline>
+             </GoogleReCaptchaProvider>
         </ThemeProvider>
     );
 }
