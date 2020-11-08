@@ -59,16 +59,9 @@ function donate_test_app_callback( $atts = array(), $content = null , $tag = 'do
     //   wp_enqueue_script( string $handle, string $src = '', array $deps = array(), string|bool|null $ver = false, bool $in_footer = false )
     //   https://developer.wordpress.org/reference/functions/wp_enqueue_script
     // Add in footer <script src="http://localhost/wordpress/wp-content/plugins/react-example/build/index.js?ver=1603502594" id="donate-test-app-js"></script>
-    // wp_enqueue_script( 'donate-test-app', plugins_url( 'build/index.js', __FILE__ ), array( 'wp-element' ), time(), true );
-    // wp_enqueue_script( 'donate-test-app-runtime', plugins_url( 'build/static/js/runtime-main.d2d326aa.js', __FILE__ ), array( 'wp-element' ), time(), true );
-    // wp_enqueue_script( 'donate-test-app-chunk',   plugins_url( 'build/static/js/2.a89aeaf9.chunk.js', __FILE__ ), array( 'wp-element' ), time(), true );
-    // wp_enqueue_script( 'donate-test-app-main',    plugins_url( 'build/static/js/main.db7e3978.chunk.js', __FILE__ ), array( 'wp-element' ), time(), true );
-    // wp_enqueue_script( 'donate-test-app-runtime', plugins_url( 'build/static/js/runtime-main.d2d326aa.js', __FILE__ ), array( 'wp-element' ), time(), true );
-    // wp_enqueue_script( 'donate-test-app-chunk',   plugins_url( 'build/static/js/2.54a2d675.chunk.js', __FILE__ ), array( 'wp-element' ), time(), true );
-    // wp_enqueue_script( 'donate-test-app-main',    plugins_url( 'build/static/js/main.3e1a8036.chunk.js', __FILE__ ), array( 'wp-element' ), time(), true );
-    wp_enqueue_script( 'donate-test-app-runtime', plugins_url( 'build/static/js/runtime-main.d2d326aa.js', __FILE__ ), array( 'wp-element' ), time(), true );
-    wp_enqueue_script( 'donate-test-app-chunk',   plugins_url( 'build/static/js/2.4ad7ae47.chunk.js', __FILE__ ), array( 'wp-element' ), time(), true );
-    wp_enqueue_script( 'donate-test-app-main',    plugins_url( 'build/static/js/main.908bbc50.chunk.js', __FILE__ ), array( 'wp-element' ), time(), true );
+    wp_enqueue_script( 'donate-test-app-runtime', plugins_url( 'build/static/js/runtime-main.d2d326aa.js', __FILE__ ), array(), time(), true );
+    wp_enqueue_script( 'donate-test-app-chunk',   plugins_url( 'build/static/js/2.4ad7ae47.chunk.js', __FILE__ ), array(), time(), true );
+    wp_enqueue_script( 'donate-test-app-main',    plugins_url( 'build/static/js/main.908bbc50.chunk.js', __FILE__ ), array(), time(), true );
 
     // Enqueue a CSS stylesheet.
     //   wp_enqueue_style( string $handle, string $src = '', string[] $deps = array(), string|bool|null $ver = false, string $media = 'all' )

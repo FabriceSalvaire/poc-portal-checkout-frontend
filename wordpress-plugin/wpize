@@ -1,0 +1,36 @@
+#! /usr/bin/env python3
+
+####################################################################################################
+
+from pathlib import Path
+import os
+
+####################################################################################################
+
+def copy_js_file(src, dst):
+    print(f"{src} -> {dst}")
+    with open(src, 'r') as fh:
+        lines = fh.readlines()
+    with open(dst, 'w') as fh:
+        fh.write(''.join(lines))
+
+####################################################################################################
+
+source = Path('../src').resolve()
+dest = Path('./src').resolve()
+print(source)
+
+for root, dirs, files in os.walk(source):
+    root = Path(root)
+    relative_root = root.relative_to(source)
+    if str(relative_root) in (
+            '.',
+            'components',
+    ):
+        dest_root = dest.joinpath(relative_root)
+        if not dest_root.exists():
+            os.mkdir(dest_root)
+        for _file in files:
+            relative_file = Path(_file)
+            if relative_file.suffix in ('.js', '.jsx'):
+                copy_js_file(root.joinpath(relative_file), dest_root.joinpath(relative_file))

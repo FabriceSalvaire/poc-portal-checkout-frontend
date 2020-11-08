@@ -1,0 +1,1 @@
+node_modules/@wordpress/scripts/config/webpack.config.js
