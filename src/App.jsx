@@ -593,8 +593,6 @@ export default function App() {
     //     <YourApp />
     // </GoogleReCaptchaProvider>
 
-    // Fixme: select theme normal or AAA
-
     return message ? (
         <Message message={message} />
     ) : (
