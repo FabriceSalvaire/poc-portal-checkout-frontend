@@ -1,0 +1,15 @@
+{
+  "name": "donate-test",
+  "version": "1.0.0",
+  "description": "Donate test plugin",
+  "main": "index.js",
+  "scripts": {
+      "build": "wp-scripts build",
+      "start": "wp-scripts start"
+  },
+  "author": "Fabrice Salvaire",
+  "license": "GPLv3",
+  "devDependencies": {
+    "@wordpress/scripts": "^12.4.0"
+  }
+}
