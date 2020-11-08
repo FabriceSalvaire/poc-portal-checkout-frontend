@@ -38,6 +38,7 @@ import React, { useState, useEffect } from "react";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -52,6 +53,9 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import ScopedCssBaseline from '@material-ui/core/ScopedCssBaseline';
 
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
+// https://styled-system.com
+import { styled } from '@material-ui/core/styles';
+import { compose, spacing, palette } from '@material-ui/system';
 
 // https://www.google.com/recaptcha
 //   https://developers.google.com/recaptcha/docs/v3
@@ -109,8 +113,8 @@ function AmountField(props) {
     const classes = useFormStyle();
 
     // Internal states
-    const [preset_amount, set_preset_amount] = React.useState(props.default_preset_amount);
-    const [custom_amount, set_custom_amount] = React.useState("");
+    const [preset_amount, set_preset_amount] = useState(props.default_preset_amount);
+    const [custom_amount, set_custom_amount] = useState("");
 
     // Forward change
     const emit_amount_change = (amount, is_valid) => {
@@ -433,34 +437,66 @@ function Step3(props) {
 
 /**************************************************************************************************/
 
-function CheckoutForm() {
+const step_defaults_prod = {
+    // Step1
+    // donation_occurrence: "once",
+    donation_occurrence: SelectDonationOccurrence.defaultProps.default_donation_occurrence,
+    amount: Config.default_amounts[0],
+    is_amount_valid: true,
+
+    // Step2
+    email: "",
+    donator_type: SelectDonatorType.defaultProps.default_donator_type,
+    // donator_type: "individual",
+    forname: "",
+    name: "",
+    organisation_name: "",
+    tax_receipt: true,
+    address: "",
+    complement: "",
+    zip_code: "",
+    city: "",
+    country: "France",
+
+    // Step3
+    payment_method: Config.payment_methods[0].id,
+};
+
+const step_defaults_dev = {
+    // Step1
+    // donation_occurrence: "once",
+    donation_occurrence: SelectDonationOccurrence.defaultProps.default_donation_occurrence,
+    amount: Config.default_amounts[0],
+    is_amount_valid: true,
+
+    // Step2
+    email: "john.doe@example.com",
+    donator_type: SelectDonatorType.defaultProps.default_donator_type,
+    // donator_type: "individual",
+    forname: "John",
+    name: "Doe",
+    organisation_name: "",
+    tax_receipt: true,
+    address: "1 road",
+    complement: "",
+    zip_code: "75000",
+    city: "Paris",
+    country: "France",
+
+    // Step3
+    payment_method: Config.payment_methods[0].id,
+};
+
+// const step_defaults = step_defaults_prod;
+const step_defaults = step_defaults_dev;
+
+/**************************************************************************************************/
+
+function CheckoutForm(props) {
     // Fixme: state design
     //   We must store field values in a state
     //   we must pass default values, else we would have to get it from the DOM ...
-    const [values, set_values] = React.useState({
-        // Step1
-        // donation_occurrence: "once",
-        donation_occurrence: SelectDonationOccurrence.defaultProps.default_donation_occurrence,
-        amount: Config.default_amounts[0],
-        is_amount_valid: true,
-
-        // Step2
-        email: "john.doe@example.com",
-        donator_type: SelectDonatorType.defaultProps.default_donator_type,
-        // donator_type: "individual",
-        forname: "John",
-        name: "Doe",
-        organisation_name: "",
-        tax_receipt: true,
-        address: "",
-        complement: "",
-        zip_code: "",
-        city: "",
-        country: "France",
-
-        // Step3
-        payment_method: Config.payment_methods[0].id,
-    });
+    const [values, set_values] = useState(step_defaults);
 
     const on_change = (prop, value) => {
         console.log(`on_change ${prop} ${value}`);
@@ -472,79 +508,42 @@ function CheckoutForm() {
         set_values({...values, amount: value, is_amount_valid: is_valid});
     };
 
-    // handle_verify(token) {
-    //     console.log("recaptcha token:", token);
-    // };
-
-    // // const handle_submit = async (event) => {
-    // async handle_submit(event) {
-    //     event.preventDefault();
-
-    //     const stripe = await stripe_promise;
-
-    //     let int_amount = Math.trunc(parseFloat(this.state.amount) * 100);
-    //     const data = {
-    //         "date": "2020-10-26T14:24:12.709Z", // Fixme: 
-    //         "int_amount": int_amount,
-    //         "donator_type": "individual",
-    //         "name": this.state.name,
-    //         "email": this.state.email,
-    //         // "callback_url": "string",
-    //         "success_suffix_url": "?success=true",
-    //         "cancel_suffix_url": "?canceled=true"
-    //     };
-    //     console.log(data);
-
-    //     const backend_url = "https://portal-demo-backend.fabrice-salvaire.fr";
-    //     const response = await fetch(backend_url + "/api/v1/donations/", {
-    //         method: "POST",
-    //         body: JSON.stringify(data)
-    //     });
-
-    //     const donation = await response.json();
-    //     console.log(donation);
-
-    //     // When the customer clicks on the button, redirect them to Checkout.
-    //     const result = await stripe.redirectToCheckout({
-    //         sessionId: donation.stripe_session_id,
-    //     });
-
-    //     if (result.error) {
-    //         // If `redirectToCheckout` fails due to a browser or network
-    //         // error, display the localized error message to your customer
-    //         // using `result.error.message`.
-    //     }
-    // };
-
-    // <GoogleReCaptcha onVerify={this.handle_verify} />
+    const on_submit = (event) => {
+        event.preventDefault();
+        // console.log("Form values are", values);
+        props.on_submit(values);
+    };
 
     return (
-        <form
+        <React.Fragment>
+            <form
         /* id="" */
         /* name="donation-checkout-form" */
-            autoComplete="on"
         /* novalidate */
-            label="Form"
-        > {/* onSubmit={this.handle_submit} */}
-            <Step1 values={values} on_change={on_change} on_amount_change={on_amount_change} />
-            <Step2 values={values} on_change={on_change} />
-            <Config.messages.defiscalisation_text donator_type={values.donator_type} amount={values.amount} />
-            <Step3 values={values} on_change={on_change} />
+                autoComplete="on"
+                label="Form"
+                onSubmit={on_submit}
+            >
+                <Step1 values={values} on_change={on_change} on_amount_change={on_amount_change} />
+                <Step2 values={values} on_change={on_change} />
+                <Config.messages.defiscalisation_text donator_type={values.donator_type} amount={values.amount} />
+                <Step3 values={values} on_change={on_change} />
 
-            <Box mt={4}>
-                <Grid container justify="center">
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                        disabled={!values.is_amount_valid}
-                    >
-                        {Config.messages.submit_title(values.amount)}
-                    </Button>
-                </Grid>
-            </Box>
-        </form>
+                <Box mt={4}>
+                    <Grid container justify="center">
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            disabled={!values.is_amount_valid}
+                        >
+                            {Config.messages.submit_title(values.amount)}
+                        </Button>
+                    </Grid>
+                </Box>
+            </form>
+        </React.Fragment>
     );
 }
 
@@ -558,22 +557,124 @@ const Message = ({ message }) => (
 
 /**************************************************************************************************/
 
-export default function App() {
-    const [on_accessibility_mode, set_on_accessibility_mode] = React.useState(false);
-    const [message, set_message] = useState("");
+function CheckoutProcess(props) {
+    const [data, set_data] = useState({});
+    const [checkout_state, set_checkout_state] = useState("form");
 
     useEffect(() => {
         // Check to see if this is a redirect back from Checkout
         const query = new URLSearchParams(window.location.search);
 
         if (query.get("success")) {
-            set_message("Order placed! You will receive an email confirmation.");
+            set_checkout_state("stripe_sucess");
         }
 
         if (query.get("canceled")) {
-            set_message("Order canceled -- continue to shop around and checkout when you're ready.");
+            set_checkout_state("stripe_canceled");
         }
-    }, [message]);
+    }, [checkout_state]);
+
+    const on_submit = (values) => {
+        console.log("Form values are", values);
+        set_checkout_state("captcha");
+        set_data(values);
+    };
+
+    const redirect_to_stripe = async () => {
+        console.log("Redirect to Stripe", data);
+
+        const stripe = await stripe_promise;
+
+        let now = new Date();
+        let int_amount = Math.trunc(parseFloat(data.amount) * 100);
+        const backend_data = {
+            date: now.toISOString(),
+            int_amount: int_amount,
+            donator_type: data.donator_type,
+            name: data.name,
+            email: data.email,
+            callback_url: "string",
+            success_suffix_url: "?success=true",
+            cancel_suffix_url: "?canceled=true"
+        };
+        console.log(backend_data);
+
+        // const backend_url = "https:portal-demo-backend.fabrice-salvaire.fr";
+        const backend_url = "http://127.0.0.1:8000";
+        const response = await fetch(backend_url + "/api/v1/donations/", {
+            method: "POST",
+            body: JSON.stringify(backend_data)
+        });
+
+        const donation = await response.json();
+        // Fixme: handle error
+        // {"detail":[
+        //   {"loc":["body","date"],"msg":"field required","type":"value_error.missing"},
+        //   {"loc":["body","int_amount"],"msg":"field required","type":"value_error.missing"}
+        // ]}
+        console.log(donation);
+
+        // When the customer clicks on the button, redirect them to Checkout.
+        const result = await stripe.redirectToCheckout({
+            sessionId: donation.stripe_session_id,
+        });
+
+        if (result.error) {
+            // If `redirectToCheckout` fails due to a browser or network
+            // error, display the localized error message to your customer
+            // using `result.error.message`.
+        }
+    };
+
+    const on_recaptcha_verify = (token) => {
+        console.log("recaptcha token:", token);
+        set_checkout_state("stripe");
+        set_data({ ...data, recaptcha_token: token });
+        redirect_to_stripe();
+    };
+
+    const Span = styled('span')(compose(spacing));
+
+    switch (checkout_state) {
+    case "form":
+        return ( <CheckoutForm on_submit={on_submit}/> );
+
+    case "captcha":
+        return (
+            <Container maxWidth="lg">
+                <p>
+                    <CircularProgress />
+                    <Span ml={3}>Verify Captcha ...</Span>
+                </p>
+                <GoogleReCaptcha onVerify={on_recaptcha_verify} />
+            </Container>
+        );
+
+    case "stripe":
+        return (
+            <Container maxWidth="lg">
+                <p>
+                    <CircularProgress />
+                    <Span ml={3}>You will be redirected to <strong>stripe.com</strong> to checkout ...</Span>
+                </p>
+            </Container>
+        );
+
+    case "stripe_sucess":
+        // "Order canceled -- continue to shop around and checkout when you're ready."
+        const message = "Order placed! You will receive an email confirmation.";
+        return (
+            <Message message={message} />
+        );
+
+    default:
+    }
+};
+
+/**************************************************************************************************/
+
+export default function App() {
+    const [on_accessibility_mode, set_on_accessibility_mode] = useState(false);
 
     const toggle_accessibility_mode = (event) => {
         set_on_accessibility_mode(event.target.checked);
@@ -593,9 +694,7 @@ export default function App() {
     //     <YourApp />
     // </GoogleReCaptchaProvider>
 
-    return message ? (
-        <Message message={message} />
-    ) : (
+    return (
         <ThemeProvider theme={on_accessibility_mode ? accessibility_theme : theme}>
              <GoogleReCaptchaProvider
                 reCaptchaKey={Config.recaptcha_site_key}
@@ -605,18 +704,20 @@ export default function App() {
                      <Container component="main" maxWidth="lg">
                          <Paper elevation={3}>
                              <Box p={3}>
-                                 <FormControlLabel
-                                     control={
-                                         <Switch
-                                             name="accessibility-mode-checkbox"
-                                             color="primary"
-                                             checked={on_accessibility_mode}
-                                             onChange={toggle_accessibility_mode}
-                                         />
-                                     }
-                                     label={Config.messages.accessibility_checkbox_title}
-                                 />
-                                 <CheckoutForm />
+                                 <Box mb={3}>
+                                     <FormControlLabel
+                                         control={
+                                             <Switch
+                                                 name="accessibility-mode-checkbox"
+                                                 color="primary"
+                                                 checked={on_accessibility_mode}
+                                                 onChange={toggle_accessibility_mode}
+                                             />
+                                         }
+                                         label={Config.messages.accessibility_checkbox_title}
+                                     />
+                                 </Box>
+                                 <CheckoutProcess />
                              </Box>
                          </Paper>
                      </Container>
