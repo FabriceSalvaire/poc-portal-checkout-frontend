@@ -54,6 +54,7 @@ Note: **eslint-plugin-react-hooks** is included by default in Create React App.
 
    npm start
    ```
+  **Note:** to customise the browser, uses e.g. `BROWSER="google-chrome" yarn start`
 1. Go to http://localtest.me:3000/checkout
 1. Build the application for production
    ```
