@@ -8,6 +8,18 @@ Design](https://material.io/design).
 
 * implement [WAI-ARIA](https://www.w3.org/TR/wai-aria) for accessibility
 
+### reCAPTCHA Protection
+
+* [Google reCAPTCHA](https://www.google.com/recaptcha)
+* https://en.wikipedia.org/wiki/ReCAPTCHA
+* https://developers.google.com/recaptcha/docs/v3
+* https://github.com/t49tran/react-google-recaptcha-v3
+
+* [hCaptcha](https://www.hcaptcha.com)
+  hCaptcha is free to use for publishers of any size.
+* https://github.com/hCaptcha/react-hcaptcha
+* https://blog.cloudflare.com/moving-from-recaptcha-to-hcaptcha
+
 # Alternative Implementations
 
 * [Framasoft](https://framasoft.org/fr/#soutenir) which uses [Vue.js](https://vuejs.org) and
