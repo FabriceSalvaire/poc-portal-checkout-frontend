@@ -17,24 +17,24 @@
 
 ## How to Build the application
 
-* It requires Node JS
-* Install NPM packages using the command `npm install` or `yarn install`, it must create a *node_module* directory
-* Build using the command `npm start` or `yarn start`
+<!-- * It requires Node JS -->
+<!-- * Install NPM packages using the command `npm install` or `yarn install`, it must create a *node_module* directory -->
+<!-- * Build using the command `npm start` or `yarn start` -->
 
-**Build Output:**
+<!-- **Build Output:** -->
 
-```
-```
+<!-- ``` -->
+<!-- ``` -->
 
-It must create a *build* directory containing an *index.js* file.
+<!-- It must create a *build* directory containing an *index.js* file. -->
 
-It runs the [wp-script](https://developer.wordpress.org/block-editor/packages/packages-scripts/) tool.
+<!-- It runs the [wp-script](https://developer.wordpress.org/block-editor/packages/packages-scripts/) tool. -->
 
 ## Wordpress and React
 
-React framework is the foundation of the Wordpress page editor.
+React framework is the foundation of the Gutenberg Wordpress page editor.
 
-Wordpress provides
+Wordpress provides the package
 [Element](https://developer.wordpress.org/block-editor/packages/packages-element/) which is an
 abstraction layer atop React.
 
@@ -46,9 +46,9 @@ For example:
 const { Component, render, useState } = wp.element;
 ```
 
-**Note: we can only use this if we don't use React packages.**
+**Note: we can only use this facility if we don't use React packages!**
 
-**How to remove React from the bundle ?**
+## How to remove React from the bundle ?
 
 * https://webpack.js.org/configuration/externals
 * https://webpack.js.org/plugins/split-chunks-plugin
@@ -83,7 +83,17 @@ splitChunks: {
 
 # Wordpress Theme Stylesheet Conflict
 
-* reset style using `!important` CSS rules
+HTML and CSS of the plugin should match the CSS of the Wordpress theme.  For example, if the theme
+uses Bootstrap then a plugin should do the same.  Else styling conflicts could appear, because a CSS
+theme could reset CSS defaults of tags like `body`, `h1`, `input`...  A workaround is to re-reset
+the CSS in a `div` wrapper.  But it could be tricky to find the setting that breaks your plugin ...
+
+**Note:** to reset style uses `!important` rules
+
+## Wordpress theme issues
+
+* 2019 has little resets than 2020
+* 2020 has font scaling size issue and ...
 
 Reset for 2020 theme:
 
@@ -116,7 +126,7 @@ input[type="text"], input[type="password"], input[type="email"], input[type="url
 
 ## Wordpress default theme: Twenty Twenty
 
-* [Block Editor project for WordPress](https://github.com/WordPress/gutenberg)
+* [Gutenberg — Block Editor project for WordPress](https://github.com/WordPress/gutenberg)
   https://github.com/WordPress/gutenberg-examples
 
 * https://github.com/wordpress/twentytwenty
