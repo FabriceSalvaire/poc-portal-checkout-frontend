@@ -593,15 +593,13 @@ function CheckoutProcess(props) {
             donator_type: data.donator_type,
             name: data.name,
             email: data.email,
-            callback_url: "string",
+            // callback_url: "string",
             success_suffix_url: "?success=true",
             cancel_suffix_url: "?canceled=true"
         };
         console.log(backend_data);
 
-        // const backend_url = "https:portal-demo-backend.fabrice-salvaire.fr";
-        const backend_url = "http://127.0.0.1:8000";
-        const response = await fetch(backend_url + "/api/v1/donations/", {
+        const response = await fetch(Config.backend_url + "/api/v1/donations/", {
             method: "POST",
             body: JSON.stringify(backend_data)
         });

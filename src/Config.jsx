@@ -14,6 +14,10 @@ export const stripe_public_api_key = "pk_test_51HdczbBKQhCtA3D9aKEImtHELwbA2BGFl
 // reCaptcha Site Key
 export const recaptcha_site_key = '6LeTlt0ZAAAAAEH8r-8lYhgdzfoKMxkWVA8BMklX';
 
+// export const backend_url = "https:portal-demo-backend.fabrice-salvaire.fr";
+// export const backend_url = "http://localtest.me:8000";
+export const backend_url = "http://127.0.0.1:8000";
+
 /**************************************************************************************************/
 
 // https://www.impots.gouv.fr/portail/particulier/questions/jai-fait-des-dons-une-association-que-puis-je-deduire
