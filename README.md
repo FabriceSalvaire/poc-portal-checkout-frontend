@@ -4,14 +4,15 @@ This repository implements a donation checkout component using the [React](https
 framework (16.8 hooks) and [Material-UI](https://material-ui.com) React components for [Material
 Design](https://material.io/design).
 
+![screenshot](https://code.electrolab.fr/fabrice/poc-portal-checkout-frontend/-/raw/poc-portal-checkout-frontend/doc/form-screenshot.png)
+
 ## Stack
 
 * [React](https://reactjs.org) Web Framework
-* [React Router](https://reactrouter.com)
-* [Redux](https://redux.js.org)
-* transpiled and bundled by [Webpack](https://webpack.js.org)
+* [Create React App](https://create-react-app.dev) (using Webpack)
+  transpiled and bundled by [Webpack](https://webpack.js.org)
 * [JSS](https://cssinjs.org) stylesheet
-* Nginx HTTP proxy
+* Nginx HTTP proxy or as a Wordpress Plugin
 
 ## Features
 
