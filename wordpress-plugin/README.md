@@ -85,19 +85,33 @@ splitChunks: {
 
 HTML and CSS of the plugin should match the CSS of the Wordpress theme.  For example, if the theme
 uses Bootstrap then a plugin should do the same.  Else styling conflicts could appear, because a CSS
-theme could reset CSS defaults of tags like `body`, `h1`, `input`...  A workaround is to re-reset
-the CSS in a `div` wrapper.  But it could be tricky to find the setting that breaks your plugin ...
+theme could reset CSS defaults of tags like `<html>`, `<body>`, `<h1>`, `<input />`...  A workaround
+is to re-reset the CSS in a `div` wrapper.  But it could be tricky to find the setting that breaks
+your plugin ...
 
-**Note:** to reset style uses `!important` rules
+**Tips to find what break:**
+* Check `<html>` and `<body>`rules for global resets.
+* Take care to `rem` unit which is relative to page font size.
+* Navigate into the DOM around a broken component and look for CSS rules from the theme which are
+  placed above your plugin rules.
+* Look especially for tags like <h1>, <input> ..., plugin's `<div>` are unlikely to be the issue.
+* Spacing issues could arise from the parent box or children.
+
+<!-- **Note:** to reset style uses `!important` rules -->
 
 ## Wordpress theme issues
 
-* 2019 has little resets than 2020
-* 2020 has font scaling size issue and ...
+* 2019 has little resets than 2020, just a some `h` and `input` customisation.
+* 2020 has in addition a font scaling size issue due to `html { font-size: 62.5%; }` rule
 
 Reset for 2020 theme:
 
 ```
+html {
+￼    /* font-size: 62.5%; */
+￼    scroll-behavior: smooth;
+}
+
 .entry-content > *:not(.alignwide):not(.alignfull):not(.alignleft):not(.alignright):not(.is-style-wide) {
     max-width: 58rem;
     width: calc(100% - 4rem);
