@@ -588,14 +588,24 @@ function CheckoutProcess(props) {
         let now = new Date();
         let int_amount = Math.trunc(parseFloat(data.amount) * 100);
         const backend_data = {
-            date: now.toISOString(),
-            int_amount: int_amount,
             donator_type: data.donator_type,
-            name: data.name,
             email: data.email,
+            name: data.name,
+            forname: data.forname,  // Fixme:
+            address: data.address,
+            complement: data.complement,
+            zip_code: data.zip_code,
+            country_code3: "FRA", // Fixme: data.country_code3,
+
+            date: now.toISOString(),
+            donation_occurrence: data.donation_occurrence,
+            int_amount: int_amount,
+            payment_method: data.payment_method,
+
             // callback_url: "string",
             success_suffix_url: "?success=true",
-            cancel_suffix_url: "?canceled=true"
+            cancel_suffix_url: "?canceled=true",
+            captcha: "",  // Fixme:
         };
         console.log(backend_data);
 
