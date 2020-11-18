@@ -9,7 +9,7 @@ Design](https://material.io/design).
 ## Stack
 
 * [React](https://reactjs.org) Web Framework
-* [Create React App](https://create-react-app.dev) (using Webpack)
+* [Create React App](https://create-react-app.dev)
   transpiled and bundled by [Webpack](https://webpack.js.org)
 * [JSS](https://cssinjs.org) stylesheet
 * Nginx HTTP proxy or as a Wordpress Plugin
